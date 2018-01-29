@@ -2,12 +2,20 @@
 #include <fstream>
 #include <sstream>
 using namespace std;
+//USER DEFINED struct
 
+struct item {
+  string word;
+  int count;
+};
+
+
+//************************* STOP WORD FUNCTIONS ************************************************
 void getStopWords(char *ignoreWordFileName, string ignoreWords[]) {
   string line;
   int i = 0;
   fstream data;
-  data.open(*ignoreWordFileName);
+  data.open(ignoreWordFileName);
 
   if (data.is_open()) {
     while (getline(data,line))
@@ -22,16 +30,47 @@ void getStopWords(char *ignoreWordFileName, string ignoreWords[]) {
 
 }
 
-int main(int argc, char const *argv[]) {
+bool isStopWord(string word, string ignoreWords[]){
+  for (int i = 0; i < 50; i++)
+  {
+    if (word == ignoreWords[i]) {
+      return true;
+    }
+  }
+}
+
+//************************* FULL TEXT PARSING FUNCTION ************************************************
+
+
+void getTextWords(string filename) {
+    cout << "Test";
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+int main(int argc, char *argv[]) {
   int numberPrint = stoi(argv[1]);
   string fullTextFile = argv[2];
   string ignoreFilename = argv[3];
-  string *ignoreFilenameRef;
   string mainIgnoreWordArray[50];
+  int n = 100;
+  item *mainWordArray;
+  mainWordArray = new item[n];
 
-  ignoreFilenameRef = &ignoreFilename;
+  getStopWords(argv[3], mainIgnoreWordArray);
+  getTextWords("test");
 
-  getStopWords(ignoreFilenameRef, mainIgnoreWordArray);
+
 
   return 0;
 }
