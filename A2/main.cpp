@@ -40,6 +40,7 @@ bool isStopWord(string word, string ignoreWords[]){
       return true;
     }
   }
+  return false;
 }
 
 //************************* FULL TEXT PARSING FUNCTION ************************************************
@@ -65,8 +66,47 @@ int isUniqueWord(string word, item array[], int length) {
 
 }
 
+void arraySort(item wordItemList[], int length) {
+    item temp;
 
-void getTextWords(string filename, string ignoreWords[]) {
+    for (int i = 0; i < length; i++)
+    {
+        if (wordItemList[i].count < wordItemList[i + 1].count) {
+            temp.word = wordItemList[i].word;
+            temp.count = wordItemList[i].count;
+
+            wordItemList[i].word = wordItemList[i+1].word;
+            wordItemList[i].count = wordItemList[i+1].count;
+
+            wordItemList[i+1].word = temp.word;
+            wordItemList[i+1].count = temp.count;
+
+            i = 0;
+        }
+    }
+
+}
+
+int getTotalNumberNonStopWords(item wordItemList[], int numberOfUniqueWords) {
+  int sum = 0;
+
+  for ( int i = 0; i < numberOfUniqueWords; i++)
+  {
+    sum = sum + wordItemList[i].count;
+  }
+
+  return sum;
+}
+
+void printTopN(item wordItemList[], int topN) {
+
+  for (int z = 0; z < topN; z++)
+  {
+    cout << wordItemList[z].count << " - " << wordItemList[z].word << endl;
+  }
+}
+
+void getTextWords(string filename, string ignoreWords[], int printX) {
 
 //strings necessary for PARSING
     string line;
@@ -82,6 +122,8 @@ void getTextWords(string filename, string ignoreWords[]) {
     int uniqueCheck;
     item *mainWordArray;
     mainWordArray = new item[n];
+    item *temp;
+
 
 
     ifstream ff;
@@ -92,10 +134,11 @@ void getTextWords(string filename, string ignoreWords[]) {
                 getline(ff,line);
 
                 stringstream ss(line);
-                while(ss>>word)
+                while(ss.good())
                 {
+                                ss>>word;
                                 stopCheck = isStopWord(word,ignoreWords);
-                                if (stopCheck == true) {
+                                if (stopCheck == true || word == "") {
                                     doNothing();
                                 } else {
                                     if (wordCount == 0) {
@@ -107,36 +150,36 @@ void getTextWords(string filename, string ignoreWords[]) {
                                         uniqueCheck = isUniqueWord(word,mainWordArray,wordCount);
                                         if (uniqueCheck != -1) {
                                             mainWordArray[uniqueCheck].count++;
-                                        }
-                                        if (uniqueCheck == -1) {
+                                        } else {
                                             mainWordArray[j].word = word;
                                             mainWordArray[j].count++;
                                             j++;
                                             wordCount++;
                                         }
-
                                     }
+                                  }
+
+
+                                  if (wordCount == limit) {
+                                    doubleCount++;
+                                    temp = new item[2*limit];
+
+                                    for (int z = 0; z < limit; z++)
+                                    {
+                                      temp[z].word = mainWordArray[z].word;
+                                      temp[z].count = mainWordArray[z].count;
+                                    }
+                                    delete [] mainWordArray;
+                                    mainWordArray = temp;
+                                    temp = nullptr;
+                                    limit = 2 * wordCount;
+
                                   }
 
 
 
                   }
-                  if (wordCount == limit) {
-                    doubleCount++;
-                    item *temp;
-                    temp = new item[2*n];
 
-                    for (int z = 0; z < limit; z++)
-                    {
-                      temp[z].word = mainWordArray[z].word;
-                      temp[z].count = mainWordArray[z].count;
-                    }
-                    delete [] mainWordArray;
-                    mainWordArray = temp;
-                    temp = nullptr;
-                    limit = 2 * wordCount;
-
-                  }
 
 
     }
@@ -144,13 +187,25 @@ void getTextWords(string filename, string ignoreWords[]) {
   } else {
     ff.close();
   }
-    cout << wordCount << endl;
-    cout << doubleCount << endl;
-/*
-    for (int i = 0; i < wordCount; i++)
+
+
+    /*for (int i = 0; i < 30; i++)
     {
       cout << mainWordArray[i].word << " " << mainWordArray[i].count << endl;
     }*/
+    //arraySort(mainWordArray,wordCount);
+    printTopN(mainWordArray,printX);
+    cout << "#" << endl;
+    cout << "Array doubled: " << doubleCount << endl;
+    cout << "#" << endl;
+    cout << "Unique non-common words: " << wordCount << endl;
+    cout << "#" << endl;
+    cout << "Total non-common words: " << getTotalNumberNonStopWords(mainWordArray, wordCount) << endl;
+
+
+
+    delete [] mainWordArray;
+    mainWordArray = nullptr;
 
 }
 
@@ -173,7 +228,7 @@ int main(int argc, char *argv[]) {
 
 
   getStopWords(argv[3], mainIgnoreWordArray);
-  getTextWords(fullTextFile, mainIgnoreWordArray);
+  getTextWords(fullTextFile, mainIgnoreWordArray, numberPrint);
 
 
 
