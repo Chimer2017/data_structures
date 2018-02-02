@@ -193,7 +193,7 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
     {
       cout << mainWordArray[i].word << " " << mainWordArray[i].count << endl;
     }*/
-    //arraySort(mainWordArray,wordCount);
+    arraySort(mainWordArray,wordCount);
     printTopN(mainWordArray,printX);
     cout << "#" << endl;
     cout << "Array doubled: " << doubleCount << endl;
