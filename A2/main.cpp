@@ -71,6 +71,7 @@ void arraySort(item wordItemList[], int length) {
 
     for (int i = 0; i < length; i++)
     {
+
         if (wordItemList[i].count < wordItemList[i + 1].count) {
             temp.word = wordItemList[i].word;
             temp.count = wordItemList[i].count;
@@ -82,6 +83,8 @@ void arraySort(item wordItemList[], int length) {
             wordItemList[i+1].count = temp.count;
 
             i = 0;
+        } else {
+          doNothing();
         }
     }
 
@@ -123,8 +126,9 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
     item *mainWordArray;
     mainWordArray = new item[n];
     item *temp;
+    int f = 0;
 
-
+    int canCount = 0;
 
     ifstream ff;
     ff.open(filename);
@@ -136,14 +140,19 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
                 stringstream ss(line);
                 while(ss.good())
                 {
+
                                 ss>>word;
+                                if (word == "") {
+                                  cout << "empty" << " " << ++f << endl;
+                                }
+
                                 stopCheck = isStopWord(word,ignoreWords);
                                 if (stopCheck == true || word == "") {
                                     doNothing();
                                 } else {
                                     if (wordCount == 0) {
                                         mainWordArray[j].word = word;
-                                        mainWordArray[j].count = 1;
+                                        mainWordArray[j].count++;
                                         j++;
                                         wordCount++;
                                     } else {
