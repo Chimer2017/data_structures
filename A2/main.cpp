@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+//#include <algorithm>
 using namespace std;
 //USER DEFINED struct
 
@@ -65,29 +66,10 @@ int isUniqueWord(string word, item array[], int length) {
 
 
 }
+bool sortByAge(const item &lhs, const item &rhs) { return lhs.count > rhs.count; }
 
 void arraySort(item wordItemList[], int length) {
-    item temp;
-
-    for (int i = 0; i < length; i++)
-    {
-
-        if (wordItemList[i].count < wordItemList[i + 1].count) {
-            temp.word = wordItemList[i].word;
-            temp.count = wordItemList[i].count;
-
-            wordItemList[i].word = wordItemList[i+1].word;
-            wordItemList[i].count = wordItemList[i+1].count;
-
-            wordItemList[i+1].word = temp.word;
-            wordItemList[i+1].count = temp.count;
-
-            i = 0;
-        } else {
-          doNothing();
-        }
-    }
-
+    sort(wordItemList,wordItemList+length,sortByAge);
 }
 
 int getTotalNumberNonStopWords(item wordItemList[], int numberOfUniqueWords) {
@@ -129,6 +111,7 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
     int f = 0;
 
     int canCount = 0;
+    string str;
 
     ifstream ff;
     ff.open(filename);
@@ -138,13 +121,13 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
                 getline(ff,line);
 
                 stringstream ss(line);
+                if (line.empty()) {
+                  continue;
+                }
                 while(ss.good())
                 {
 
                                 ss>>word;
-                                if (word == "") {
-                                  cout << "empty" << " " << ++f << endl;
-                                }
 
                                 stopCheck = isStopWord(word,ignoreWords);
                                 if (stopCheck == true || word == "") {
@@ -184,24 +167,13 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
                                     limit = 2 * wordCount;
 
                                   }
-
-
-
                   }
-
-
-
     }
     ff.close();
   } else {
     ff.close();
   }
 
-
-    /*for (int i = 0; i < 30; i++)
-    {
-      cout << mainWordArray[i].word << " " << mainWordArray[i].count << endl;
-    }*/
     arraySort(mainWordArray,wordCount);
     printTopN(mainWordArray,printX);
     cout << "#" << endl;
@@ -217,18 +189,6 @@ void getTextWords(string filename, string ignoreWords[], int printX) {
     mainWordArray = nullptr;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 int main(int argc, char *argv[]) {
   int numberPrint = stoi(argv[1]);
   string fullTextFile = argv[2];
