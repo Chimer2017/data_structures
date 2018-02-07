@@ -17,6 +17,73 @@ struct city{
   }
 
 };
+//*************************SEARCH FUNCTION************************//
+city *searchList( city *head, string target ) {
+	city *current;
+	current = head;
+
+	while( current!=nullptr )
+	{
+		if( current->cityName == target )
+			return current;
+		else
+			current = current->next;
+	}
+
+	return nullptr;
+}
+//*************************INSERT HEAD************************//
+city *insertHead( city *head, string cityName ) {
+	// Create a new node and tmp poitner
+	city *tmp;
+  tmp = new city(cityName,head,"" );
+	return tmp;
+}
+
+/*void insertAfter( Node *prevNode, string newItem )
+{
+	// Create new node
+	Node *tmp = new Node;
+	tmp->item = newItem;
+
+	// Link new node with next node
+	tmp->next = prevNode->next;
+
+	// Link prevNode with new node
+	prevNode->next = tmp;
+
+	tmp = nullptr;
+
+}
+
+void appendEnd( Node * head, string newItem )
+{
+	Node *tmp = new Node;
+
+	tmp->item = newItem;
+
+	// set current to head
+	Node* current = head;
+	// create node for keeping track of last (previous) node
+	Node* last;
+
+	// find the tail of list
+	while( current != nullptr )
+	{
+		last = current;
+		current = current->next;
+	}
+
+	// link previous node with new node
+	last->next = tmp;
+
+	// make new tail point to null
+	tmp->next = nullptr;
+
+}*/
+
+
+
 
 int printMenu() {
   string input;
@@ -77,10 +144,11 @@ void printPath(city *head) {
 }
 //*************************ADD CITY OPTION 3**********************//
 city *addCity(city *head, city *previous, string cityName) {
-  //three use cases
-
   // add a new networkHead
-
+  if (previous->cityName == "First")
+  {
+    head = insertHead(head, cityName);
+  }
   // add a new tail
 
   // insert a city
@@ -116,7 +184,7 @@ int main() {
         cin >> newCity;
         cout << "Please input the name of the city that your new city will follow. Press enter when done." << endl;
         cin >> previousCity;
-        //networkHead = addCity(networkHead,/*SEARCH FUNCTION*/, newCity);
+        networkHead = addCity(networkHead,searchList(networkHead, previousCity), newCity);
       }
   }
 
