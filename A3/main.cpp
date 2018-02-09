@@ -39,52 +39,35 @@ city *insertHead( city *head, string cityName ) {
   tmp = new city(cityName,head,"" );
 	return tmp;
 }
-
-/*void insertAfter( Node *prevNode, string newItem )
-{
+//*************************INSERT AFTER************************//
+void insertAfter( city *prevNode, string newCityName ){
 	// Create new node
-	Node *tmp = new Node;
-	tmp->item = newItem;
-
-	// Link new node with next node
-	tmp->next = prevNode->next;
-
-	// Link prevNode with new node
+	city *tmp;
+  tmp = new city(newCityName,prevNode->next,"");
 	prevNode->next = tmp;
-
-	tmp = nullptr;
+  tmp = nullptr;
 
 }
-
-void appendEnd( Node * head, string newItem )
-{
-	Node *tmp = new Node;
-
-	tmp->item = newItem;
-
-	// set current to head
-	Node* current = head;
-	// create node for keeping track of last (previous) node
-	Node* last;
-
-	// find the tail of list
+//*************************INSERT TAIL************************//
+void insertEnd( city *head, string newTail) {
+	city *tmp;
+  tmp = new city();
+	tmp->cityName = newTail;
+	city *current;
+  current = new city();
+  current = head;
+	city *last;
+  last = new city();
 	while( current != nullptr )
 	{
 		last = current;
 		current = current->next;
 	}
-
-	// link previous node with new node
-	last->next = tmp;
-
-	// make new tail point to null
+  last->next = tmp;
 	tmp->next = nullptr;
 
-}*/
-
-
-
-
+}
+//*************************PRINT MENU************************//
 int printMenu() {
   string input;
 
@@ -144,26 +127,66 @@ void printPath(city *head) {
 }
 //*************************ADD CITY OPTION 3**********************//
 city *addCity(city *head, city *previous, string cityName) {
-  // add a new networkHead
-  if (previous->cityName == "First")
+
+  if (previous->cityName.empty() || previous->cityName == "Boston")
   {
-    head = insertHead(head, cityName);
+    insertEnd(head,cityName);
+  }
+  else
+  {
+    insertAfter(previous,cityName);
+
   }
   // add a new tail
 
-  // insert a city
 
   return head;
 }
+//*************************TRANSMIT MESSAGE OPTION 4**********************//
+void transmitMsg(city *head) {
+  string line;
+  string word;
+  city *current;
+  current = new city();
+  fstream filestream;
+  filestream.open("messageLn.txt");
 
 
+  if (filestream.is_open())
+  {
+    while(!filestream.eof())
+    {
+      getline(filestream,line);
+      if (line.empty()) {
+        continue;
+      }
+      stringstream ss(line);
+      while(ss >> word)
+      {
+        current = head;
+        while(current != nullptr)
+        {
+          current->message = word;
+          cout << current->cityName << " recieved " << word << endl;
+          current->message = "";
+          current = current->next;
+        }
 
-
+      }
+    }
+  }
+  else
+  {
+    cout << "File Did Not Open";
+  }
+}
+//*************************MAIN**********************//
 int main() {
   int selection = 0;
   city *networkHead;
   string newCity;
   string previousCity;
+  string currentTail = "Boston";
 
   while(selection != 5)
   {
@@ -182,11 +205,31 @@ int main() {
       {
         cout << "Please input the name of new city you would like to add to the network. Press enter when done." << endl;
         cin >> newCity;
+
         cout << "Please input the name of the city that your new city will follow. Press enter when done." << endl;
         cin >> previousCity;
-        networkHead = addCity(networkHead,searchList(networkHead, previousCity), newCity);
+        if (previousCity == "First")
+        {
+          networkHead = insertHead(networkHead, newCity);
+        }
+        else if (previousCity.empty() || previousCity == currentTail)
+        {
+          insertEnd(networkHead, newCity);
+          currentTail = newCity;
+        }
+        else
+        {
+          networkHead = addCity(networkHead,searchList(networkHead, previousCity), newCity);
+
+        }
+
+      }
+      else if (selection == 3)
+      {
+        transmitMsg(networkHead);
       }
   }
+  cout << "Goodbye!" << endl;
 
 
 }
