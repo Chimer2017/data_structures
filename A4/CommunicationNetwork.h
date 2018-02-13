@@ -39,7 +39,7 @@ public:
     //void transmitMsg(char *); //this is like a string
     void printNetwork();
     void deleteCity(string);
-    //void deleteNetwork();
+    void deleteNetwork();
 //protected:
 
 private:

@@ -66,13 +66,15 @@ CommunicationNetwork::CommunicationNetwork()
 //DECONSTRUCTOR
 CommunicationNetwork::~CommunicationNetwork()
 {
-  City *current, *tmp = head;
+  City *current = head;
+  City *tmp;
   while (current != nullptr)
   {
     tmp = current->next;
     delete current;
     current = tmp;
   }
+  head = nullptr;
 
 }
 //BUILD NETWORK
@@ -162,4 +164,18 @@ void CommunicationNetwork::deleteCity(string target)
 
   /* Finally, free the memory occupied by del*/
   delete compare;
+}
+void CommunicationNetwork::deleteNetwork()
+{
+  City *current = head;
+  City *tmp;
+
+  while (current != nullptr)
+  {
+    tmp = current->next;
+    delete current;
+    current = tmp;
+  }
+  head = nullptr;
+
 }

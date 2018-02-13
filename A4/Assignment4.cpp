@@ -26,8 +26,10 @@ int main() {
   CommunicationNetwork network;
   string previousCity;
   string newCity;
+  int status = 0;
 
-  while (selection != 7)
+
+  while (status == 0)
   {
     selection = printMenu();
     if (selection == 1)
@@ -56,6 +58,16 @@ int main() {
       cout << "Enter a city name: ";
       cin >> target;
       network.deleteCity(target);
+    }
+    if (selection == 6)
+    {
+      network.deleteNetwork();
+    }
+    if (selection == 7)
+    {
+      network.~CommunicationNetwork();
+      cout << "Goodbye!" << endl;
+      status = 1;
     }
   }
 
