@@ -21,7 +21,7 @@ int printMenu() {
   return stoi(input);
 }
 
-int main() {
+int main(int argc, char const *argv[]) {
   int selection = 0;
   CommunicationNetwork network;
   string previousCity;
@@ -47,16 +47,19 @@ int main() {
     if (selection == 4)
     {
       cout << "Enter a city name:";
-      cin >> newCity;
+      cin.ignore();
+      getline(cin, newCity);
+
       cout << "Enter a previous city name:";
-      cin >> previousCity;
+      getline(cin, previousCity);
       network.addCity(newCity,previousCity);
     }
     if (selection == 5)
     {
+      cin.ignore();
       string target;
       cout << "Enter a city name: ";
-      cin >> target;
+      getline(cin,target);
       network.deleteCity(target);
     }
     if (selection == 6)

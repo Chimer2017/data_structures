@@ -36,11 +36,16 @@ void insertAfter( City *prevNode, string newCityName ){
   tmp = nullptr;
 
 }
-void insertEnd( City *head, string newTail) {
-	City *tmp;
-  tmp = new City();
-	tmp->cityName = newTail;
+void insertEnd( City *head, string tailAdd, City *tail) {
+	City *newTail;
+  newTail = new City(tailAdd,nullptr,nullptr,"");
 	City *current;
+  current = tail;
+  current->next = newTail;
+  newTail->previous = current;
+  tail = newTail;
+
+  /*
   current = new City();
   current = head;
 	City *last;
@@ -53,6 +58,8 @@ void insertEnd( City *head, string newTail) {
   last->next = tmp;
   tmp->previous = last;
 	tmp->next = nullptr;
+  tail = tmp;
+  */
 
 }
 
@@ -95,6 +102,10 @@ void CommunicationNetwork::buildNetwork()
     current = tmp;
     i++;
   }
+  tail = current;
+  //cout << tail->previous->cityName;
+  currentTail = "Boston";
+
   /*cout << "===Current Path===" << endl;
   current = head;
   while(current != nullptr)
@@ -114,13 +125,17 @@ void CommunicationNetwork::printNetwork()
   current = new City();
   cout << "===Current Path===" << endl;
   current = head;
-  cout << "NULL" << endl;
+  cout << "NULL" << " <- ";
   while(current != nullptr)
   {
-    cout << current->cityName << " <-> ";
+    cout << current->cityName;
     current = current->next;
+    if (current != nullptr)
+    {
+      cout << " <-> ";
+    }
   }
-  cout << "NULL" << endl;
+  cout << " -> " << "NULL" << endl;
   cout << "==================" << endl;
 
 
@@ -136,12 +151,23 @@ void CommunicationNetwork::addCity(string newCity, string previousCity)
   {
     currentTail = newCity;
     //cout << currentTail << endl;
-    insertEnd(head,newCity);
+    insertEnd(head,newCity, tail);
 
   }
   else
   {
-    insertAfter(searchList(head, previousCity),newCity);
+		City *searchCity;
+		searchCity = searchList(head, previousCity);
+		if (searchCity == nullptr)
+		{
+			cout << "not found" << endl;
+		}
+		else
+		{
+			insertAfter(searchCity,newCity);
+		}
+
+
   }
 
 }
@@ -149,6 +175,11 @@ void CommunicationNetwork::deleteCity(string target)
 {
   City *compare;
   compare = searchList(head,target);
+  if (target == currentTail)
+  {
+    currentTail = tail->previous->cityName;
+    tail = tail->previous;
+  }
 
   /* If node to be deleted is head node */
   if(head == compare)
@@ -177,5 +208,9 @@ void CommunicationNetwork::deleteNetwork()
     current = tmp;
   }
   head = nullptr;
+
+}
+void CommunicationNetwork::transmitMsg(char *message)
+{
 
 }

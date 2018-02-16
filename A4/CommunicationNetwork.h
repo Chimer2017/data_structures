@@ -36,7 +36,7 @@ public:
     ~CommunicationNetwork();
     void addCity(string,string);
     void buildNetwork();
-    //void transmitMsg(char *); //this is like a string
+    void transmitMsg(char *); //this is like a string
     void printNetwork();
     void deleteCity(string);
     void deleteNetwork();
