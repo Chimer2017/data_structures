@@ -210,7 +210,51 @@ void CommunicationNetwork::deleteNetwork()
   head = nullptr;
 
 }
-void CommunicationNetwork::transmitMsg(char *message)
+void CommunicationNetwork::transmitMsg(char *filename)
 {
+	City *current;
+	string line;
+	string word;
+	current = new City();
+	ifstream messageIn;
+	messageIn.open(filename);
+	if (messageIn.is_open())
+  {
+    while(!messageIn.eof())
+    {
+      getline(messageIn,line);
+      if (line.empty()) {
+        continue;
+      }
+      stringstream ss(line);
+      while(ss >> word)
+      {
+        current = head;
+        while(current != nullptr)
+        {
+          current->message = word;
+          cout << current->cityName << " received " << word << endl;
+          current->message = "";
+          current = current->next;
+        }
+				current = tail;
+				current = current->previous;
+				while (current != nullptr)
+				{
+				current->message = word;
+                cout << current->cityName << " received " << word << endl;
+                current->message = "";
+                current = current->previous;
+				}
+
+      }
+    }
+  }
+  else
+  {
+    cout << "File Did Not Open";
+  }
+
+
 
 }

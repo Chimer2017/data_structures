@@ -21,7 +21,7 @@ int printMenu() {
   return stoi(input);
 }
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
   int selection = 0;
   CommunicationNetwork network;
   string previousCity;
@@ -42,7 +42,7 @@ int main(int argc, char const *argv[]) {
     }
     if (selection == 3)
     {
-      cout << "message sent" << endl;
+      network.transmitMsg(argv[1]);
     }
     if (selection == 4)
     {
