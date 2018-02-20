@@ -19,10 +19,29 @@ int printMenu() {
 
 
 int main() {
+  Queue que(10);
+
+  string addWord;
   int selection = 0;
   int status = 0;
   while (status == 0)
   {
     selection = printMenu();
+    if (selection == 1)
+    {
+      cout << "Word:";
+      cin >> addWord;
+      que.enqueue(addWord);
+    }
+    if (selection == 2)
+    {
+      que.dequeue();
+    }
+    if (selection == 5)
+    {
+      que.~Queue();
+      cout << "Goodbye!" << endl;
+      status = 1;
+    }
   }
 }
