@@ -73,11 +73,26 @@ void Queue::dequeue()
 
 void Queue::printQueue()
 {
+  int current;
+  current = queueHead;
+  while (current < queueTail)
+  {
+    cout << current << ": " << arrayQueue[current] << endl;
+    current++;
+  }
 
 }
 
 void Queue::enqueueSentence(string str)
 {
+  string word;
+  stringstream ss(str);
+  while (ss >> word)
+  {
+    enqueue(word);
+  }
+
+
 
 }
 

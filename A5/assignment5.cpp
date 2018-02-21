@@ -37,6 +37,18 @@ int main() {
     {
       que.dequeue();
     }
+    if (selection == 3)
+    {
+      que.printQueue();
+    }
+    if (selection == 4)
+    {
+      string sentence;
+      cout << "sentence: ";
+      cin.ignore();
+      getline(cin,sentence);
+      que.enqueueSentence(sentence);
+    }
     if (selection == 5)
     {
       que.~Queue();
