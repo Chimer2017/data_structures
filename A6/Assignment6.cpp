@@ -61,15 +61,36 @@ int main() {
   while (status == 0)
   {
     selection = printMenu();
+    if (selection == 1)
+    {
+      string movieName;
+      cout << "Enter title:" << endl;
+      cin.ignore();
+      getline(cin,movieName);
+      tree.findMovie(movieName);
+    }
+    if (selection == 2)
+    {
+      string movieName;
+      cout << "Enter title:" << endl;
+      cin.ignore();
+      getline(cin,movieName);
+      tree.rentMovie(movieName);
+    }
     if (selection == 3)
     {
       tree.printMovieInventory();
+    }
+    if (selection == 5)
+    {
+      cout<<"Tree contains: "<<tree.countMovieNodes()<<" movies." << endl;
     }
     if (selection == 6)
     {
       status = 1;
       cout << "Goodbye!" << endl;
     }
+
   }
 
 

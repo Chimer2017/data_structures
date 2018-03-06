@@ -60,9 +60,7 @@ Think about in what order should you destroy.
        return searchKeyHelper(root->right, data);
     return searchKeyHelper(root->left, data);
  }
-/**
-This function will search the data in the tree
-**/
+
 bool BST::searchKey(int data){
     return searchKeyHelper(root, data);
 }

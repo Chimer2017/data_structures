@@ -56,22 +56,22 @@ public:
     MovieTree();
     ~MovieTree();
     void printMovieInventory();
-  //  int countMovieNodes();
+    int countMovieNodes();
     //void deleteMovieNode(std::string title);
     void addMovieNode(int ranking, std::string title, int releaseYear, int quantity);
-  //  void findMovie(std::string title);
-  //  void rentMovie(std::string title);
+    void findMovie(std::string title);
+    void rentMovie(std::string title);
 
 protected:
 
 private:
   void DeleteAll(MovieNodeBST * node); //use this for the post-order traversal deletion of the tree
   void printMovieInventory(MovieNodeBST * node);
-  //  void countMovieNodes(MovieNodeBST *node, int *c);
-  //  MovieNodeBST* searchBST(MovieNodeBST *node, std::string title); //use this recursive function to find a pointer to a node in the BST, given a MOVIE TITLE
-  //  MovieNodeLL* searchLL(MovieNodeLL* head, std::string title); //use this to return a pointer to a node in a linked list, given a MOVIE TITLE and the head of the linked list
+  void countMovieNodes(MovieNodeBST *node, int *c);
+  MovieNodeBST* searchBST(MovieNodeBST *node, std::string title); //use this recursive function to find a pointer to a node in the BST, given a MOVIE TITLE
+  MovieNodeLL* searchLL(MovieNodeLL* head, std::string title); //use this to return a pointer to a node in a linked list, given a MOVIE TITLE and the head of the linked list
   //  MovieNodeBST* treeMinimum(MovieNodeBST *node); //use this to find the left most leaf node of the BST, you'll need this in the delete function
-    MovieNodeBST* root;
+  MovieNodeBST* root;
 };
 
 #endif // MOVIETREE_H
