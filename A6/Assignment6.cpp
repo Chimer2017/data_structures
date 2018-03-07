@@ -81,6 +81,14 @@ int main() {
     {
       tree.printMovieInventory();
     }
+    if (selection == 4)
+    {
+      string delTitle;
+      cout << "Enter title:" << endl;
+      cin.ignore();
+      getline(cin,delTitle);
+      tree.deleteMovieNode(delTitle);
+    }
     if (selection == 5)
     {
       cout<<"Tree contains: "<<tree.countMovieNodes()<<" movies." << endl;
