@@ -1,0 +1,41 @@
+function * deleteNode(root,key)
+{
+
+    if (root == NULL) return root;
+
+
+    if (letter < root->key)
+        root->leftChild = deleteNode(root->leftChild, key);
+
+
+    else if (letter > root->letter)
+        root->rightChild = deleteNode(root->rightChild, key);
+
+
+    else
+    {
+        if (root->leftChild == NULL)
+        {
+            node *temp = root->rightChild;
+            delete root;
+            return temp;
+        }
+        else if (root->rightChild == NULL)
+        {
+            node *temp = root->leftChild;
+            delete root;
+            return temp;
+        }
+
+        node *current;
+        current = root->rightChild;
+
+        while (current->leftChild != NULL)
+            current = current->leftChild;
+
+        root->key = current->key;
+        
+        root->rightChild = deleteNode(root->rightChild, current->letter);
+    }
+    return root;
+}

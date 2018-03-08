@@ -33,7 +33,7 @@ int main() {
   string tempQuantity;
   char tempFirstLetter;
   MovieTree tree;
-  string filename = "test.txt";
+  string filename = "Assignment6Movies (2).txt";
   ifstream ff;
   ff.open(filename);
   if (ff.is_open())
@@ -47,7 +47,9 @@ int main() {
       getline(ss,tempQuantity);
 
       tree.addMovieNode(stoi(tempRank),tempTitle,stoi(tempYear),stoi(tempQuantity));
-
+      tree.printMovieInventory();
+      cout << "--------------------" << endl;
+      //cout << "Added " << tempTitle << endl;
 
 
 

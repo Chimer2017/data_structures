@@ -4,19 +4,92 @@
 #include <string>
 #include "MovieTree.hpp"
 
-using namespace std;
 int countPath(MovieNodeLL *head)
 {
   MovieNodeLL *current;
-  current = new MovieNodeLL();
   current = head;
   int count = 0;
   while(current != nullptr)
   {
     count++;
+    cout << current->title << " ";
     current = current->next;
   }
+  cout << endl;
   return count;
+}
+MovieNodeBST *treeMinHelper(MovieNodeBST *node)
+{
+  MovieNodeBST *current;
+  current = node;
+
+  /* loop down to find the leftmost leaf */
+  while (current->leftChild != NULL)
+      current = current->leftChild;
+
+  return current;
+}
+
+MovieNodeBST* MovieTree::treeMinimum(MovieNodeBST *node) //use this to find the left most leaf node of the BST, you'll need this in the delete function
+{
+    return treeMinHelper(root);
+}
+
+void deleteList(MovieNodeLL *head)
+{
+  MovieNodeLL *current = head;
+  MovieNodeLL *tmp;
+  while (current != nullptr)
+  {
+    tmp = current->next;
+    delete current;
+    current = tmp;
+  }
+  head = nullptr;
+}
+MovieNodeBST * deleteNode(MovieNodeBST *root, char letter)
+{
+
+    if (root == NULL) return root;
+
+
+    if (letter < root->letter)
+        root->leftChild = deleteNode(root->leftChild, letter);
+
+
+    else if (letter > root->letter)
+        root->rightChild = deleteNode(root->rightChild, letter);
+
+
+    else
+    {
+        if (root->leftChild == NULL)
+        {
+            MovieNodeBST *temp = root->rightChild;
+            delete root;
+            return temp;
+        }
+        else if (root->rightChild == NULL)
+        {
+            MovieNodeBST *temp = root->leftChild;
+            delete root;
+            return temp;
+        }
+
+        MovieNodeBST *current;
+        current = root->rightChild;
+
+        /* loop down to find the leftmost leaf */
+        while (current->leftChild != NULL)
+            current = current->leftChild;
+
+        // Copy the inorder successor's content to this node
+        root->letter = current->letter;
+
+        // Delete the inorder successor
+        root->rightChild = deleteNode(root->rightChild, current->letter);
+    }
+    return root;
 }
 MovieNodeLL *searchList( MovieNodeLL *head, string titleForCompare )
 {
@@ -57,7 +130,7 @@ MovieNodeLL *insertHead( MovieNodeLL *head, int ranking, string title, int year,
 	// Create a new node and tmp poitner
 	MovieNodeLL *tmp;
   tmp = new MovieNodeLL(ranking, title, year, quantity );
-  tmp->next = head;
+  tmp->next = NULL;
 	return tmp;
 }
 //*************************INSERT AFTER************************
@@ -77,10 +150,8 @@ void insertEnd( MovieNodeLL *head, int ranking, string title, int year, int quan
 	MovieNodeLL *tmp;
   tmp = new MovieNodeLL(ranking, title, year, quantity);
 	MovieNodeLL *current;
-  current = new MovieNodeLL();
   current = head;
 	MovieNodeLL *last;
-  last = new MovieNodeLL();
 	while( current != NULL )
 	{
 		last = current;
@@ -98,7 +169,10 @@ MovieNodeLL *addMovieNodeLL(MovieNodeLL *head, int ranking, string title, int ye
   }
   else if (head != NULL && head->next == NULL && head->title.compare(title) < 0 )
   {
+    MovieNodeLL *t;
+    t =  head;
     head = insertHead(head, ranking,title, year, quantity);
+    head->next = t;
   }
   else
   {
@@ -107,16 +181,23 @@ MovieNodeLL *addMovieNodeLL(MovieNodeLL *head, int ranking, string title, int ye
     if (tmp == NULL)
     {
       insertEnd(head,ranking,title,year,quantity);
+
     }
     else if (tmp == head)
     {
-      insertHead(head, ranking,title, year, quantity);
+      MovieNodeLL *h;
+      h = head;
+      head = insertHead(head, ranking,title, year, quantity);
+      head->next = h;
     }
     else
     {
       insertAfter(tmp,ranking,title,year, quantity);
+
     }
+
   }
+  //countPath(head);
 
 
 
@@ -138,16 +219,12 @@ MovieNodeBST *addNodeHelper(MovieNodeBST *curNode, char key, int ranking, std::s
       curNode->head = addMovieNodeLL(curNode->head,ranking,title,releaseYear,quantity);
 
 
-
-
-
   return curNode;
 
 }
 MovieTree::MovieTree()
 {
-
-}
+ }
 MovieTree::~MovieTree()
 {
   DeleteAll(root);
@@ -174,7 +251,6 @@ void deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
     {
         head_ref = temp->next;   // Changed head
         delete temp;               // free old head
-        return;
     }
     while (temp != NULL && temp->title != title)
     {
@@ -183,7 +259,8 @@ void deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
     }
 
     // If key was not present in linked list
-    if (temp == NULL) return;
+    if (temp == NULL)
+      cout << "Movie not found." << endl;
 
     // Unlink the node from linked list
     prev->next = temp->next;
@@ -206,41 +283,33 @@ void MovieTree::deleteMovieNode(std::string title)
 
     if (tmp2 == NULL)
       cout << "Movie not found." << endl;
-    else
-      tmp2->quantity = (tmp2->quantity) - 1;
-
   }
 
-  if (tmp2->quantity == 0)
-  {
     int listSize;
     listSize = countPath(tmp->head);
-    cout << listSize << endl;
+
     if (listSize == 1)
     {
       deleteList(tmp->head);
       tmp->head = NULL;
-      deleteNode(root, tmp->letter);
+      deleteNode(root,title[0]);
+      cout << "one node list" << endl;
 
     }
     else
     {
-      deleteMovieNodeHelper(tmp2, title);
+      cout << "multi node list" << endl;
+      deleteMovieNodeHelper(tmp->head, title);
     }
-  }
-
-
-
-
-
 
 }
 void MovieTree::addMovieNode(int ranking, std::string title, int releaseYear, int quantity)
 {
   MovieNodeBST *newNode;
   newNode = new MovieNodeBST(title[0]);
-  if(root == NULL) // if the BST is empty create the root
+  if(root == NULL) {// if the BST is empty create the root
       root = newNode;
+      addNodeHelper(root,title[0],ranking,title,releaseYear,quantity);}
   else
     addNodeHelper(root,title[0],ranking, title, releaseYear,quantity);
 }
@@ -270,72 +339,8 @@ void MovieTree::findMovie(std::string title)
   }
 
 }
-MovieNodeBST* MovieTree::treeMinimum(MovieNodeBST *node) //use this to find the left most leaf node of the BST, you'll need this in the delete function
-{
-    return treeMinHelper(root);
-}
-MovieNodeBST *treeMinHelper(MovieNodeBST *node)
-{
-  MovieNodeBST *current;
-  current = node;
-
-  /* loop down to find the leftmost leaf */
-  while (current->leftChild != NULL)
-      current = current->leftChild;
-
-  return current;
-}
-MovieNodeBST * deleteNode(MovieNodeBST *root, char letter)
-{
-
-    if (root == NULL) return root;
 
 
-    if (letter < root->letter)
-        root->leftChild = deleteNode(root->leftChild, letter);
-
-
-    else if (letter > root->letter)
-        root->rightChild = deleteNode(root->rightChild, letter);
-
-
-    else
-    {
-        if (root->leftChild == NULL)
-        {
-            MovieNodeBST *temp = root->rightChild;
-            delete root;
-            return temp;
-        }
-        else if (root->rightChild == NULL)
-        {
-            MovieNodeBST *temp = root->leftChild;
-            delete root;
-            return temp;
-        }
-
-        MovieNodeBST *temp = treeMinimum(root->rightChild);
-
-        // Copy the inorder successor's content to this node
-        root->letter = temp->letter;
-
-        // Delete the inorder successor
-        root->rightChild = deleteNode(root->rightChild, temp->letter);
-    }
-    return root;
-}
-void deleteList(MovieNodeLL *head)
-{
-  MovieNodeLL *current = head;
-  MovieNodeLL *tmp;
-  while (current != nullptr)
-  {
-    tmp = current->next;
-    delete current;
-    current = tmp;
-  }
-  head = nullptr;
-}
 void MovieTree::DeleteAll(MovieNodeBST * node)
 {
   if(node)
