@@ -31,7 +31,7 @@ int main() {
   string tempTitle;
   string tempYear;
   string tempQuantity;
-  char tempFirstLetter;
+  //char tempFirstLetter;
   MovieTree tree;
   string filename = "Assignment6Movies (2).txt";
   ifstream ff;
@@ -51,7 +51,7 @@ int main() {
       cout << "--------------------" << endl;
       //cout << "Added " << tempTitle << endl;
 
-
+      
 
     }
   }

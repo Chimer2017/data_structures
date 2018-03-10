@@ -209,14 +209,14 @@ MovieNodeBST *addNodeHelper(MovieNodeBST *curNode, char key, int ranking, std::s
 {
   if (curNode == NULL)
   {
-      return new MovieNodeBST(key);
+      curNode = new MovieNodeBST(key);
   }
   if (key < curNode->letter)
       curNode->leftChild  = addNodeHelper(curNode->leftChild, key, ranking, title, releaseYear, quantity);
   else if (key > curNode->letter)
       curNode->rightChild = addNodeHelper(curNode->rightChild, key, ranking, title, releaseYear, quantity);
   else if (key == curNode->letter)
-      curNode->head = addMovieNodeLL(curNode->head,ranking,title,releaseYear,quantity);
+        curNode->head = addMovieNodeLL(curNode->head,ranking,title,releaseYear,quantity);
 
 
   return curNode;
@@ -224,6 +224,7 @@ MovieNodeBST *addNodeHelper(MovieNodeBST *curNode, char key, int ranking, std::s
 }
 MovieTree::MovieTree()
 {
+  root = NULL;
  }
 MovieTree::~MovieTree()
 {
@@ -241,7 +242,7 @@ int MovieTree::countMovieNodes()
   countMovieNodes(root,x);
   return *x;
 }
-void deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
+/*void deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
 {
     MovieNodeLL * temp, *prev;
     temp = head_ref;
@@ -266,6 +267,33 @@ void deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
     prev->next = temp->next;
 
     delete temp;  // Free memory
+}*/
+MovieNodeLL * deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
+{
+    MovieNodeLL * temp, *prev;
+    temp = head_ref;
+
+    // If head node itself holds the key to be deleted
+    if (temp != NULL && temp->title == title)
+    {
+        head_ref = temp->next;   // Changed head
+        delete temp;
+        return head_ref;              // free old head
+    }
+    while (temp != NULL && temp->title != title)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    // If key was not present in linked list
+    if (temp == NULL)
+      cout << "Movie not found. Helper" << endl;
+
+    // Unlink the node from linked list
+    prev->next = temp->next;
+
+    delete temp;  // Free memory
 }
 void MovieTree::deleteMovieNode(std::string title)
 {
@@ -276,32 +304,39 @@ void MovieTree::deleteMovieNode(std::string title)
   if (tmp == NULL)
   {
     cout << "Movie not found." << endl;
+
   }
   else
   {
-    tmp2 = searchLL(tmp->head,title);
+        tmp2 = searchLL(tmp->head,title);
 
-    if (tmp2 == NULL)
-      cout << "Movie not found." << endl;
-  }
+        if (tmp2 == NULL)
+          cout << "Movie not found." << endl;
+        else
+        {
+            int listSize;
+            listSize = countPath(tmp->head);
 
-    int listSize;
-    listSize = countPath(tmp->head);
+            if (listSize == 1 )
+            {
+              deleteList(tmp->head);
+              tmp->head = NULL;
+              deleteNode(root,title[0]);
 
-    if (listSize == 1)
-    {
-      deleteList(tmp->head);
-      tmp->head = NULL;
-      deleteNode(root,title[0]);
-      cout << "one node list" << endl;
+            }
+            else
+            {
+              if (tmp->head->title == title)
+                tmp->head = deleteMovieNodeHelper(tmp->head, title);
+              else
+                deleteMovieNodeHelper(tmp->head,title);
+            }
 
-    }
-    else
-    {
-      cout << "multi node list" << endl;
-      deleteMovieNodeHelper(tmp->head, title);
-    }
+         }
 
+
+
+   }
 }
 void MovieTree::addMovieNode(int ranking, std::string title, int releaseYear, int quantity)
 {
@@ -339,8 +374,6 @@ void MovieTree::findMovie(std::string title)
   }
 
 }
-
-
 void MovieTree::DeleteAll(MovieNodeBST * node)
 {
   if(node)
@@ -375,7 +408,6 @@ void MovieTree::printMovieInventory(MovieNodeBST * node)
 
 
 }
-
 void MovieTree::countMovieNodes(MovieNodeBST *node, int *c)
 {
   int totalCount;
