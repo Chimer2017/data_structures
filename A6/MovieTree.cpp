@@ -15,6 +15,7 @@ int countPath(MovieNodeLL *head)
     cout << current->title << " ";
     current = current->next;
   }
+  cout << count << endl;
   cout << endl;
   return count;
 }
@@ -239,8 +240,8 @@ void MovieTree::printMovieInventory()
 int MovieTree::countMovieNodes()
 {
   int *x;
+  int sum = 0;
   countMovieNodes(root,x);
-  return *x;
 }
 /*void deleteMovieNodeHelper(MovieNodeLL *head_ref, string title)
 {
@@ -410,16 +411,32 @@ void MovieTree::printMovieInventory(MovieNodeBST * node)
 }
 void MovieTree::countMovieNodes(MovieNodeBST *node, int *c)
 {
-  int totalCount;
-  totalCount = 0;
-  if(node)
+  if (node)
   {
          countMovieNodes( node->leftChild,c);
-         totalCount += countPath(node->head);
+         *c = countPath(node->head);
+         cout << c << endl;
          countMovieNodes( node->rightChild,c);
+
   }
-  c = &totalCount;
-  cout << totalCount;
+
+
+
+
+
+
+
+  /*if (node == NULL)
+    cout << "0" << endl;
+
+  countMovieNodes( node->leftChild,c);
+  tempCount = countPath(node->head);
+  totalCount += tempCount;
+  countMovieNodes( node->rightChild,c);
+
+  //cout << totalCount << "io" << endl;
+*/
+
 }
 MovieNodeBST* MovieTree::searchBST(MovieNodeBST *node, std::string title)
 {
