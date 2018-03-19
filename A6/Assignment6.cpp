@@ -92,9 +92,8 @@ int main() {
       tree.deleteMovieNode(delTitle);
     }
     if (selection == 5)
-    { int countD;
-      countD = tree.countMovieNodes();
-      cout << "Tree contains: " << countD << " movies." << endl;
+    {
+      cout << "Tree contains: " << tree.countMovieNodes() << " movies." << endl;
     }
     if (selection == 6)
     {
