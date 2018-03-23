@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "graph.cpp"
+#include "Graph.cpp"
 using namespace std;
+
 
 void readCities(string arr[], string filename)
 {
@@ -16,11 +17,11 @@ void readCities(string arr[], string filename)
     while(getline(ff,line))
     {
       stringstream ss(line);
-      getline(ss,arr[i],',');
+      getline(ss,arr[i],' ');
       i++;
 
     }
-    // for (int j = 0; j < 15; j++)
+    // for (int j = 0; j < 4; j++)
     // {
     //   cout << arr[j] << endl;
     // }
@@ -47,9 +48,9 @@ void readEdge(string arr[], string filename, Graph *gr)
     while(getline(ff,line))
     {
       stringstream ss(line);
-      getline(ss,city,',');
+      getline(ss,city,' ');
       int z = 0;
-      while(getline(ss,readWeight,','))
+      while(getline(ss,readWeight,' '))
       {
         weight = stoi(readWeight);
         //cout << readWeight << endl;
@@ -78,19 +79,20 @@ int printMenu()
   string input;
   cout << "======Main Menu======" << endl;
   cout << "1. Print vertices" << endl;
-  cout << "2. Vertex adjacent" << endl;
-  cout << "3. Quit" << endl;
+  //cout << "2. Vertex adjacent" << endl;
+  cout << "2. Quit" << endl;
   cin >>  input;
   return stoi(input);
 }
-int main(int argc, char *argv[]) {
-  string cities[15];
-  string filename = "test.txt";
+
+int main(int argc, char const *argv[]) {
+  string cities[4];
+  string filename = "mat.txt";
   Graph net;
   Graph *ptrNet;
   ptrNet = &net;
   readCities(cities, filename);
-  for (int i = 0; i < 15; i++)
+  for (int i = 0; i < 4; i++)
   {
     net.addVertex(cities[i]);
   }
@@ -98,32 +100,36 @@ int main(int argc, char *argv[]) {
 
   int selection = 0;
 
-  while (selection != 3)
+  while (selection != 2)
   {
     selection = printMenu();
     if (selection == 1)
     {
       net.displayEdges();
     }
+    // if (selection == 2)
+    // {
+    //   string c1, c2;
+    //   int x;
+    //   cout << "Enter first city:" << endl;
+    //   cin.ignore();
+    //   getline(cin,c1);
+    //   cout << "Enter second city:" << endl;
+    //   cin.ignore();
+    //   getline(cin,c2);
+    //   net.isAdjacent(c1,c2);
+    //   //cout << x << end;
+    // }
     if (selection == 2)
-    {
-      string c1, c2;
-      int x;
-      cout << "Enter first city:" << endl;
-      cin.ignore();
-      getline(cin,c1);
-      cout << "Enter second city:" << endl;
-      cin.ignore();
-      getline(cin,c2);
-      net.isAdjacent(c1,c2);
-      //cout << x << end;
-    }
-    if (selection == 3)
     {
       net.~Graph();
       cout << "Goodbye!" << endl;
     }
   }
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include "graph.h"
+#include "Graph.hpp"
 
 
 
@@ -32,33 +32,33 @@ void Graph::addEdge(string v1, string v2, int weight){
     }
 }
 
-int Graph::isAdjacent(string v1, string v2) {
-  int stat = 0;
-  for(int i = 0; i < vertices.size(); i++)
-  {
-      if (vertices[i].name == v1)
-      {
-        for(int j = 0; j < vertices[i].adj.size(); j++)
-        {
-          if (vertices[i].adj[j].v->name == v2)
-          {
-            cout << "true" << endl;
-            stat = 1;
-            return vertices[i].adj[j].weight;
-
-          }
-
-        }
-
-      }
-  }
-
-  if (stat == 0)
-    cout << "false" << endl;
-  return -1;
-
-
-}
+// int Graph::isAdjacent(string v1, string v2) {
+//   int stat = 0;
+//   for(int i = 0; i < vertices.size(); i++)
+//   {
+//       if (vertices[i].name == v1)
+//       {
+//         for(int j = 0; j < vertices[i].adj.size(); j++)
+//         {
+//           if (vertices[i].adj[j].v->name == v2)
+//           {
+//             cout << "true" << endl;
+//             stat = 1;
+//             return vertices[i].adj[j].weight;
+//
+//           }
+//
+//         }
+//
+//       }
+//   }
+//
+//   if (stat == 0)
+//     cout << "false" << endl;
+//   return -1;
+//
+//
+// }
 void Graph::addVertex(string n){
     bool found = false;
     for(int i = 0; i < vertices.size(); i++){

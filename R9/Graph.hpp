@@ -18,15 +18,16 @@ struct vertex{
 class Graph
 {
     public:
-        Graph(){};  // Already implemented
-        ~Graph(){}; // Already implemented
+        Graph(){};
+        ~Graph(){};
         void addEdge(std::string v1, std::string v2, int weight);
         void addVertex(std::string name);
-        int isAdjacent(std::string v1, std::string v2);
         void displayEdges();
     protected:
     private:
+        //vector<edge> edges;
         std::vector<vertex> vertices;
+
 };
 
 #endif // GRAPH_H
