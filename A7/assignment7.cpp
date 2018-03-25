@@ -53,10 +53,10 @@ void readEdge(string arr[], string filename, Graph *gr)
       {
         weight = stoi(readWeight);
         //cout << readWeight << endl;
-        cout << city << " " << arr[z] << " " << weight << endl;
+        //cout << city << " " << arr[z] << " " << weight << endl;
         if ( weight > 0)
         {
-          cout << "added" << endl;
+          //cout << "added" << endl;
           gr->addEdge(city,arr[z],weight);
         }
 
@@ -66,11 +66,13 @@ void readEdge(string arr[], string filename, Graph *gr)
       //cout << "next"<< endl;
     }
 
+
   }
   else
   {
     ff.close();
   }
+
 
 }
 int printMenu()
@@ -113,14 +115,17 @@ int main(int argc, char *argv[]) {
       cin.ignore();
       getline(cin,c1);
       cout << "Enter second city:" << endl;
-      cin.ignore();
       getline(cin,c2);
-      net.isAdjacent(c1,c2);
+      if (net.isAdjacent(c1,c2)> 0)
+        cout << "true" << endl;
+      else
+        cout << "false" << endl;
       //cout << x << end;
     }
     if (selection == 3)
     {
       net.~Graph();
+      delete ptrNet;
       cout << "Goodbye!" << endl;
     }
   }

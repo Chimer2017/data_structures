@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 void Graph::addEdge(string v1, string v2, int weight){
 
     for(int i = 0; i < vertices.size(); i++){
@@ -20,7 +21,7 @@ void Graph::addEdge(string v1, string v2, int weight){
                     av.v = &vertices[j];
                     av.weight = weight;
                     vertices[i].adj.push_back(av);
-                    cout << vertices[i].adj.size() << endl;
+                    //cout << vertices[i].adj.size() << endl;
                     // //another vertex for edge in other direction
                     // adjVertex av2;
                     // av2.v = &vertices[i];
@@ -33,18 +34,21 @@ void Graph::addEdge(string v1, string v2, int weight){
 }
 
 int Graph::isAdjacent(string v1, string v2) {
+  //out << v1 << "," << v2 << endl;
   int stat = 0;
   for(int i = 0; i < vertices.size(); i++)
   {
       if (vertices[i].name == v1)
       {
+        //cout << v1 << " found" << endl;
         for(int j = 0; j < vertices[i].adj.size(); j++)
         {
+          //cout << vertices[i].adj[j].v->name << " , v2: " << v2 << endl;
           if (vertices[i].adj[j].v->name == v2)
           {
-            cout << "true" << endl;
+            //cout << "true" << endl;
             stat = 1;
-            return vertices[i].adj[j].weight;
+            return 1;
 
           }
 
@@ -54,9 +58,11 @@ int Graph::isAdjacent(string v1, string v2) {
   }
 
   if (stat == 0)
-    cout << "false" << endl;
-  return -1;
+  {
+    //cout << "false" << endl;
+    return 0;
 
+  }
 
 }
 void Graph::addVertex(string n){
@@ -64,7 +70,7 @@ void Graph::addVertex(string n){
     for(int i = 0; i < vertices.size(); i++){
         if(vertices[i].name == n){
             found = true;
-            cout<<vertices[i].name<<" found."<<endl;
+            //cout<<vertices[i].name<<" found."<<endl;
         }
     }
     if(found == false){
