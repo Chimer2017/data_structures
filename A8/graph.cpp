@@ -29,38 +29,38 @@ void Graph::addEdge(string v1, string v2, int weight){
         }
     }
 }
-int isAdjacent(string v1, string v2) {
-  //out << v1 << "," << v2 << endl;
-  int stat = 0;
-  for(int i = 0; i < vertices.size(); i++)
-  {
-      if (vertices[i].name == v1)
-      {
-        //cout << v1 << " found" << endl;
-        for(int j = 0; j < vertices[i].adj.size(); j++)
-        {
-          //cout << vertices[i].adj[j].v->name << " , v2: " << v2 << endl;
-          if (vertices[i].adj[j].v->name == v2)
-          {
-            //cout << "true" << endl;
-            stat = 1;
-            return 1;
-
-          }
-
-        }
-
-      }
-  }
-
-  if (stat == 0)
-  {
-    //cout << "false" << endl;
-    return 0;
-
-  }
-
-}
+// int isAdjacent(string v1, string v2) {
+//   //out << v1 << "," << v2 << endl;
+//   int stat = 0;
+//   for(int i = 0; i < vertices.size(); i++)
+//   {
+//       if (vertices[i].name == v1)
+//       {
+//         //cout << v1 << " found" << endl;
+//         for(int j = 0; j < vertices[i].adj.size(); j++)
+//         {
+//           //cout << vertices[i].adj[j].v->name << " , v2: " << v2 << endl;
+//           if (vertices[i].adj[j].v->name == v2)
+//           {
+//             //cout << "true" << endl;
+//             stat = 1;
+//             return 1;
+//
+//           }
+//
+//         }
+//
+//       }
+//   }
+//
+//   if (stat == 0)
+//   {
+//     //cout << "false" << endl;
+//     return 0;
+//
+//   }
+//
+// }
 void Graph::addVertex(string n){
     bool found = false;
     for(int i = 0; i < vertices.size(); i++){
@@ -108,16 +108,17 @@ vertex * Graph::findVertex(string city)
 
 void Graph::assignDistricts()
 {
+
   int districtCount = 1;
   for (int z = 0; z < 10; z++)
   {
-
-  string src, dst;
-  src = vertices[z].name;
-  dst = "null";
-
   if (vertices[z].districtID != -1)
     continue;
+
+  string src;
+  src = vertices[z].name;
+
+
 	// s helps determine the depth first traversal
 	stack<vertex*> s;
 	// path will be the path taken from 'src' to 'dst'
@@ -153,7 +154,6 @@ void Graph::assignDistricts()
 					break;
 			}
 			// when you reach the 'dst', terminate depth first traversal
-			if(cur->name == dst) break;
 			// push all of current's neighbors to the stack (DFS step)
 			for(int i = 0; i < cur->adj.size(); ++i)
 				s.push(cur->adj[i].v);
@@ -166,6 +166,11 @@ void Graph::assignDistricts()
   {
     cout << path[i]->name << "-->";
     path[i]->districtID = districtCount;
+    for ( int x = 0; x < path[i]->adj.size(); x++)
+    {
+      path[i]->adj[x].v->districtID = districtCount;
+    }
+
 
   }
 	path.back()->districtID = districtCount;
@@ -174,7 +179,7 @@ void Graph::assignDistricts()
 
 
 
-}
+  }
 }
 
 void Graph::shortestPath(string startC, string endC)
