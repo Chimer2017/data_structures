@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 
   int selection = 0;
 
-  while (selection != 3)
+  while (selection != 5)
   {
     selection = printMenu();
     if (selection == 1)
@@ -112,15 +112,25 @@ int main(int argc, char *argv[]) {
     }
     if (selection == 2)
     {
-      string c1, c2;
-      int x;
-      cout << "Enter first city:" << endl;
-      cin.ignore();
-      getline(cin,c1);
-      cout << "Enter second city:" << endl;
-      getline(cin,c2);
+      net.assignDistricts();
+
     }
     if (selection == 3)
+    {
+      string c1, c2;
+      cout << "Enter a starting city:" << endl;
+      cin.ignore();
+      getline(cin,c1);
+      cout << "Enter an ending city:" << endl;
+      getline(cin,c2);
+      net.shortestPath(c1,c2);
+
+    }
+    if (selection == 4)
+    {
+
+    }
+    if (selection == 5)
     {
       net.~Graph();
       delete ptrNet;
