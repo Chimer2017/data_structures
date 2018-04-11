@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <list>
 #include <stack>
 #include <queue>
 #include "graph.h"
@@ -184,11 +185,9 @@ void Graph::assignDistricts()
 
 void Graph::shortestPath(string startC, string endC)
 {
-  vertex *tmpS;
-  vertex *tmpE;
+  vertex * tmpE = findVertex(endC);
+  vertex * tmpS = findVertex(startC);
 
-  tmpS = findVertex(startC);
-  tmpE = findVertex(endC);
 
   if ( tmpS == nullptr || tmpE == nullptr)
     cout << "One or more cities doesn't exist" << endl;
@@ -199,63 +198,122 @@ void Graph::shortestPath(string startC, string endC)
   else
   {
 
-    // q helps determine the breadth first traversal
-    queue<vertex*> que;
-    // maxAdj contains a running list of the 'maximum adjacent' nodes
-    vector<vertex*> maxAdj;
+     // BFT seems to be best option
 
-    // make sure the vertices have 'visited' set to false
-    for(int i = 0; i < vertices.size(); i++)
-          vertices[i].visited = false;
+    // color all vertices red first
 
-      // handle the starting node
-    que.push(tmpS);
-    vertex * cur = que.front();
-    cur->visited = true;
-    cout << cur->name << ' ';
-    int max = cur->adj.size();
-    maxAdj.push_back(cur);
+    //standard BFT
+    vertex * startV;
+    // vertex * endV;
+    // vertex * midV;
+    for ( int i = 0; i < (int)vertices.size(); i++)
+    {
+        vertices[i].visited = false;
+        if (vertices[i].name  == startC)
+        {
+            startV = &vertices[i];
 
-    // main loop
-    while( !que.empty() ) {
-      cur = que.front();
-      que.pop();
-
-      // for each of the current node's unvisited
-      // neighbors, push, print, and visit
-      for(int i = 0; i < cur->adj.size(); ++i){
-        if(cur->adj[i].v->visited == false){
-          que.push(cur->adj[i].v);
-          cur->adj[i].v->visited = true;
-          cout << cur->adj[i].v->name << ' ';
-          int size = cur->adj[i].v->adj.size();
-          // if a node has more adjacencies than the current max,
-          // clear maxAdj and push back the new max adjacent node
-          if(size > max){
-            max = size;
-            maxAdj.clear();
-            maxAdj.push_back(cur->adj[i].v);
-          }
-          // otherwise if a node has the same number of adjacencies
-          // as the current max, simply add it to the end of the
-          // maxAdj vector
-          else if(size==max)
-            maxAdj.push_back(cur->adj[i].v);
         }
-      }
+        // if(vertices[i].name == destination)
+        // {
+        //     endV = &vertices[i];
+        // }
+        // if(vertices[i].name == intermediate)
+        // {
+        //     midV = &vertices[i];
+        // }
     }
 
-    // print final list of 'maximum adjacent' nodes
-    cout << endl << "MaxAdj: ";
-    for(int i = 0; i < maxAdj.size(); ++i)
-      cout << maxAdj[i]->name << ' ';
-    cout << endl;
-  }
+    cout << startV->name;
+
+    //Now continuing w/ the BFT algo
+
+    startV->visited = true;
+    startV->unweightedDistance = 0;
+
+    queue<vertex *> q;
+
+    q.push(startV);
+
+    vertex * n;
+    vertex * found = NULL;
+    int stat = 0;
+    vector<string> hold;
+    int disCount = 0;
+
+
+    //scan the queue now
+
+
+    while(!q.empty())
+    {
+        //need these two steps to dequeue
+        n = q.front();
+        q.pop();
+
+        //scan the adj list of each element
+
+        for ( int x = 0; x < (int)n->adj.size(); x++)
+        {
+            if (!n->adj[x].v->visited && stat == 0)
+            {
+                n->adj[x].v->parent = n;
+                n->adj[x].v->unweightedDistance = n->unweightedDistance + 1;
+                if (n->adj[x].v->name == endC)
+                {
+                    //return n->adj[x].v;
+                    //cout << "found " << endl;
+                    stat = 1;
+                    found = n->adj[x].v;
+
+
+                    vertex * current, * tmp;
+                    current = found;
+                    //cout << "hello" << endl;
+                    while (current->name != startC)
+                    {
+                    tmp = current;
+                    //cout << "Current: " << current->name << " " << "Prev: " << current->prev->name << endl;
+                    hold.push_back(current->name);
+
+                    current = tmp->parent;
+                    }
+
+                    cout << disCount;
+                    for (int z = 0; z < hold.size(); z++)
+                    {
+                      cout << "," << hold[z];
+                    }
+                    return;
+                    
+                    //cout << "hello" << endl;
+                }
+                else
+                {
+                    n->adj[x].v->visited = true;
+                    disCount++;
+                    //cout << n->adj[x].v->name << " ";
+                    q.push(n->adj[x].v);
+                }
+
+
+            }
+        }
 
 
 
+
+    }
+   //cout << found->name << endl;
+
+
+
+
+
+
+
+ }
 }
-
 void Graph::shortestWeightedPath(string startC, string endC)
 {
 
