@@ -71,7 +71,7 @@ We will call this function from insertNode.
 NOTE: root is a private member of BST. As root is a private member of BST class, main function can not access root.
       So we need this helper function. Implement your code for inserting a node in this function.
 **/
- node* BST:: insertNodeHelper(node* curNode, int data){
+ node* BST::insertNodeHelper(node* curNode, int data){
      //TODO: Implement the code for insert a node at the tree rooted at curNode.
     if (curNode == NULL)
     {

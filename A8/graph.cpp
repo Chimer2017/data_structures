@@ -183,6 +183,7 @@ void Graph::assignDistricts()
   }
 }
 
+
 void Graph::shortestPath(string startC, string endC)
 {
   vertex * tmpE = findVertex(endC);
@@ -212,47 +213,20 @@ void Graph::shortestPath(string startC, string endC)
         if (vertices[i].name  == startC)
         {
             startV = &vertices[i];
-
         }
-        // if(vertices[i].name == destination)
-        // {
-        //     endV = &vertices[i];
-        // }
-        // if(vertices[i].name == intermediate)
-        // {
-        //     midV = &vertices[i];
-        // }
     }
-
-    cout << startV->name;
-
-    //Now continuing w/ the BFT algo
-
-    startV->visited = true;
     startV->unweightedDistance = 0;
-
     queue<vertex *> q;
-
     q.push(startV);
-
     vertex * n;
     vertex * found = NULL;
     int stat = 0;
     vector<string> hold;
     int disCount = 0;
-
-
-    //scan the queue now
-
-
     while(!q.empty())
     {
-        //need these two steps to dequeue
         n = q.front();
         q.pop();
-
-        //scan the adj list of each element
-
         for ( int x = 0; x < (int)n->adj.size(); x++)
         {
             if (!n->adj[x].v->visited && stat == 0)
@@ -261,37 +235,82 @@ void Graph::shortestPath(string startC, string endC)
                 n->adj[x].v->unweightedDistance = n->unweightedDistance + 1;
                 if (n->adj[x].v->name == endC)
                 {
-                    //return n->adj[x].v;
-                    //cout << "found " << endl;
-                    stat = 1;
-                    found = n->adj[x].v;
+                  // s helps determine the depth first traversal
+                  stack<vertex*> s;
+                  // path will be the path taken from 'src' to 'dst'
+                  vector<vertex*> path;
+                  disCount = n->adj[x].v->unweightedDistance;
+                  // make sure the vertices have 'visited' set to false
+                  for(int i = 0; i < vertices.size(); i++)
+                        vertices[i].visited = false;
 
+                  // push the starting node 'src'
+                  s.push( findVertex(startC) );
 
-                    vertex * current, * tmp;
-                    current = found;
+                  // main DFS loop
+                  while( !s.empty() ){
+                    vertex * cur = s.top();
+                    s.pop();
+
+                    if( !cur->visited ){
+                      // visit current node if it was unvisited,
+                      // then add it to the tentative path
+                      cur->visited = true;
+                      path.push_back(cur);
+                      // while the last node in 'path' does not have an
+                      // edge to the current node erase it from the path
+                      while(path.size() > 1){
+                        bool isin = false;
+                        int idx = path.size()-2;
+                        for(int i = 0; i < path[path.size()-2]->adj.size(); i++){
+                          if( path[idx]->adj[i].v==path.back() ) isin = true;
+                        }
+                        if(!isin)
+                          path.erase(path.begin()+idx);
+                        else
+                          break;
+                      }
+                      // when you reach the 'dst', terminate depth first traversal
+                      if(cur->name == endC) break;
+                      // push all of current's neighbors to the stack (DFS step)
+                      for(int i = 0; i < cur->adj.size(); ++i)
+                        s.push(cur->adj[i].v);
+                    }
+
+                  }
+
+                  // print the path from 'src' to 'dst'
+                  cout << endl << disCount << ", ";
+                  for(int i = 0; i < path.size()-1; i++)
+                    cout << path[i]->name << ", ";
+                  cout << path.back()->name << endl;
+
+                    // stat = 1;
+                    // found = n->adj[x].v;
+                    // disCount = n->adj[x].v->unweightedDistance;
+                    // vertex * current, * tmp;
+                    // current = found;
+                    // while (current->name != startC)
+                    // {
+                    // tmp = current;
+                    // hold.push_back(current->name);
+                    // current = tmp->parent;
+                    // }
+                    // cout << disCount << ",";
+                    // cout << startV->name;
+                    // for (int z = 0; z < hold.size(); z++)
+                    // {
+                    //   cout << "," << hold[z];
+                    // }
+                    // cout << endl;
+                    // return;
+
                     //cout << "hello" << endl;
-                    while (current->name != startC)
-                    {
-                    tmp = current;
-                    //cout << "Current: " << current->name << " " << "Prev: " << current->prev->name << endl;
-                    hold.push_back(current->name);
-
-                    current = tmp->parent;
-                    }
-
-                    cout << disCount;
-                    for (int z = 0; z < hold.size(); z++)
-                    {
-                      cout << "," << hold[z];
-                    }
                     return;
-                    
-                    //cout << "hello" << endl;
                 }
                 else
                 {
                     n->adj[x].v->visited = true;
-                    disCount++;
                     //cout << n->adj[x].v->name << " ";
                     q.push(n->adj[x].v);
                 }
