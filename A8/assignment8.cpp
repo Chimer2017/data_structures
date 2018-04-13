@@ -128,6 +128,14 @@ int main(int argc, char *argv[]) {
     }
     if (selection == 4)
     {
+      string c1, c2;
+      cout << "Enter a starting city:" << endl;
+      cin.ignore();
+      getline(cin,c1);
+      cout << "Enter an ending city:" << endl;
+      getline(cin,c2);
+      net.shortestWeightedPath(c1,c2);
+
 
     }
     if (selection == 5)

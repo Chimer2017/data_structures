@@ -82,6 +82,7 @@ NOTE: root is a private member of BST. As root is a private member of BST class,
     else if (data > curNode->key)
         curNode->right = insertNodeHelper(curNode->right, data);
 
+
     return curNode;
  }
 

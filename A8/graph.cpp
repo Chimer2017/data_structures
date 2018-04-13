@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <stack>
+#include <set>
 #include <queue>
 #include "graph.h"
 using namespace std;
@@ -188,8 +189,6 @@ void Graph::shortestPath(string startC, string endC)
 {
   vertex * tmpE = findVertex(endC);
   vertex * tmpS = findVertex(startC);
-
-
   if ( tmpS == nullptr || tmpE == nullptr)
     cout << "One or more cities doesn't exist" << endl;
   else if (tmpS->districtID == -1 || tmpE->districtID == -1)
@@ -198,24 +197,21 @@ void Graph::shortestPath(string startC, string endC)
     cout << "No safe path between cities" << endl;
   else
   {
-
-     // BFT seems to be best option
-
-    // color all vertices red first
-
-    //standard BFT
     vertex * startV;
     // vertex * endV;
     // vertex * midV;
     for ( int i = 0; i < (int)vertices.size(); i++)
     {
         vertices[i].visited = false;
+        vertices[i].unweightedDistance = INT_MAX;
         if (vertices[i].name  == startC)
         {
             startV = &vertices[i];
         }
     }
     startV->unweightedDistance = 0;
+    startV->visited = true;
+    startV->parent = NULL;
     queue<vertex *> q;
     q.push(startV);
     vertex * n;
@@ -241,71 +237,21 @@ void Graph::shortestPath(string startC, string endC)
                   vector<vertex*> path;
                   disCount = n->adj[x].v->unweightedDistance;
                   // make sure the vertices have 'visited' set to false
-                  for(int i = 0; i < vertices.size(); i++)
-                        vertices[i].visited = false;
-
                   // push the starting node 'src'
-                  s.push( findVertex(startC) );
-
-                  // main DFS loop
-                  while( !s.empty() ){
-                    vertex * cur = s.top();
-                    s.pop();
-
-                    if( !cur->visited ){
-                      // visit current node if it was unvisited,
-                      // then add it to the tentative path
-                      cur->visited = true;
-                      path.push_back(cur);
-                      // while the last node in 'path' does not have an
-                      // edge to the current node erase it from the path
-                      while(path.size() > 1){
-                        bool isin = false;
-                        int idx = path.size()-2;
-                        for(int i = 0; i < path[path.size()-2]->adj.size(); i++){
-                          if( path[idx]->adj[i].v==path.back() ) isin = true;
-                        }
-                        if(!isin)
-                          path.erase(path.begin()+idx);
-                        else
-                          break;
-                      }
-                      // when you reach the 'dst', terminate depth first traversal
-                      if(cur->name == endC) break;
-                      // push all of current's neighbors to the stack (DFS step)
-                      for(int i = 0; i < cur->adj.size(); ++i)
-                        s.push(cur->adj[i].v);
-                    }
-
+                  s.push(n->adj[x].v);
+                  vertex * tmp = n->adj[x].v->parent;
+                  while(tmp != NULL)
+                  {
+                      s.push(tmp);
+                      tmp = tmp->parent;
                   }
-
-                  // print the path from 'src' to 'dst'
-                  cout << endl << disCount << ", ";
-                  for(int i = 0; i < path.size()-1; i++)
-                    cout << path[i]->name << ", ";
-                  cout << path.back()->name << endl;
-
-                    // stat = 1;
-                    // found = n->adj[x].v;
-                    // disCount = n->adj[x].v->unweightedDistance;
-                    // vertex * current, * tmp;
-                    // current = found;
-                    // while (current->name != startC)
-                    // {
-                    // tmp = current;
-                    // hold.push_back(current->name);
-                    // current = tmp->parent;
-                    // }
-                    // cout << disCount << ",";
-                    // cout << startV->name;
-                    // for (int z = 0; z < hold.size(); z++)
-                    // {
-                    //   cout << "," << hold[z];
-                    // }
-                    // cout << endl;
-                    // return;
-
-                    //cout << "hello" << endl;
+                  cout << disCount;
+                  while( !s.empty())
+                  {
+                      cout << ", "<< s.top()->name;
+                      s.pop();
+                  }
+                  cout << endl;
                     return;
                 }
                 else
@@ -314,27 +260,74 @@ void Graph::shortestPath(string startC, string endC)
                     //cout << n->adj[x].v->name << " ";
                     q.push(n->adj[x].v);
                 }
-
-
             }
         }
+    }
+   //cout << found->name << endl;
+ }
+}
 
-
+void Graph::shortestWeightedPath(string startC, string endC)
+{
+  vertex * tmpE = findVertex(endC);
+  vertex * tmpS = findVertex(startC);
+  if ( tmpS == nullptr || tmpE == nullptr)
+    cout << "One or more cities doesn't exist" << endl;
+  else if (tmpS->districtID == -1 || tmpE->districtID == -1)
+    cout << "Please identify the districts before checking distances" << endl;
+  else if(tmpS->districtID != tmpE->districtID)
+    cout << "No safe path between cities" << endl;
+  else
+  {
+    set<vertex*> Q;
+    for ( int i = 0; i < (int)vertices.size(); i++)
+    {
+        vertices[i].visited = false;
+        vertices[i].weightedDistance = INT_MAX;
+        if (vertices[i].name  == startC)
+        {
+            startV = &vertices[i];
+        }
+        vertices[i].parent = NULL;
+        Q.insert(&vertices[i]);
 
 
     }
-   //cout << found->name << endl;
+
+    startV->weightedDistance = 0;
+    vertex * u;
+
+    while(!Q.empty())
+    {
+        if (Q.size() == 1)
+        {
+          u = Q.begin().
+        }
+        else
+        {
+          int min = 1000;
+          for (int i = 0; i < Q.size() ; i++)
+          {
+            if (Q[i]->weightedDistance < min)
+            {
+              u = Q[i];
+            }
+          }
+        }
+        Q.erase(u);
+        for ( int i = 0; i < u->adj.size(); i++)
+        {
+          u->adj[i].v->weightedDistance = u->weightedDistance;
+          int alt;
+          alt = u->weightedDistance + u->adj[i].weight;
+          if (alt < )
+        }
+    }
+  }
 
 
 
 
-
-
-
- }
-}
-void Graph::shortestWeightedPath(string startC, string endC)
-{
 
 }
 
@@ -343,3 +336,68 @@ void Graph::DFSLabel(string startC, int distID)
 {
 
 }
+
+
+
+
+
+
+// main DFS loop
+// while( !s.empty() ){
+//   vertex * cur = s.top();
+//   s.pop();
+//
+//   if( !cur->visited ){
+//     // visit current node if it was unvisited,
+//     // then add it to the tentative path
+//     cur->visited = true;
+//     path.push_back(cur);
+//     // while the last node in 'path' does not have an
+//     // edge to the current node erase it from the path
+//     while(path.size() > 1){
+//       bool isin = false;
+//       int idx = path.size()-2;
+//       for(int i = 0; i < path[path.size()-2]->adj.size(); i++){
+//         if( path[idx]->adj[i].v==path.back() ) isin = true;
+//       }
+//       if(!isin)
+//         path.erase(path.begin()+idx);
+//       else
+//         break;
+//     }
+//     // when you reach the 'dst', terminate depth first traversal
+//     if(cur->name == endC) break;
+//     // push all of current's neighbors to the stack (DFS step)
+//     for(int i = 0; i < cur->adj.size(); ++i)
+//       s.push(cur->adj[i].v);
+
+
+
+
+// print the path from 'src' to 'dst'
+// cout  << disCount << ", ";
+// for(int i = 0; i < path.size()-1; i++)
+//   cout << path[i]->name << ", ";
+// cout << path.back()->name << endl;
+
+  // stat = 1;
+  // found = n->adj[x].v;
+  // disCount = n->adj[x].v->unweightedDistance;
+  // vertex * current, * tmp;
+  // current = found;
+  // while (current->name != startC)
+  // {
+  // tmp = current;
+  // hold.push_back(current->name);
+  // current = tmp->parent;
+  // }
+  // cout << disCount << ",";
+  // cout << startV->name;
+  // for (int z = 0; z < hold.size(); z++)
+  // {
+  //   cout << "," << hold[z];
+  // }
+  // cout << endl;
+  // return;
+
+  //cout << "hello" << endl;
