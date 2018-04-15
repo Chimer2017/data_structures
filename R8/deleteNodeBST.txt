@@ -26,6 +26,11 @@ function * deleteNode(root,key)
             delete root;
             return temp;
         }
+        else
+        {
+            root = minValue(root->rightChild);
+            return deleteNode(root->rightChild, letter);
+        }
 
         node *current;
         current = root->rightChild;
@@ -34,8 +39,101 @@ function * deleteNode(root,key)
             current = current->leftChild;
 
         root->key = current->key;
-        
+
         root->rightChild = deleteNode(root->rightChild, current->letter);
     }
     return root;
+}
+
+
+TreeNode * deleteNode(TreeNode * root,key)
+{
+
+    if (root == NULL) return root;
+
+
+    if (key < root->key)
+        root->leftChild = deleteNode(root->leftChild, key);
+
+
+    else if (key > root->letter)
+        root->rightChild = deleteNode(root->rightChild, key);
+
+
+    else
+    {
+        if (root->leftChild == NULL)
+        {
+            node *temp = root->rightChild;
+            delete root;
+            return temp;
+        }
+        else if (root->rightChild == NULL)
+        {
+            node *temp = root->leftChild;
+            delete root;
+            return temp;
+        }
+        else
+        {
+            root = min(root->rightChild);
+            return deleteNode(root->rightChild, key);
+        }
+
+        node *current;
+        current = root->rightChild;
+
+        while (current->leftChild != NULL)
+            current = current->leftChild;
+
+        root->key = current->key;
+
+        root->rightChild = deleteNode(root->rightChild, current->letter);
+    }
+    return root;
+}
+
+
+
+
+
+TreeNode * min(TreeNode *node)
+{
+  TreeNode *current;
+  current = node;
+
+  /* loop down to find the leftmost leaf */
+  while (current->leftChild != NULL)
+      current = current->leftChild;
+
+  return current;
+}
+
+TreeNode * max(TreeNode *node)
+{
+  TreeNode *current;
+  current = node;
+
+  /* loop down to find the leftmost leaf */
+  while (current->rightChild != NULL)
+      current = current->rightChild;
+
+  return current;
+}
+
+
+
+
+void replaceMaxWithMin(TreeNode *root)
+{
+    TreeNode *small, *big;
+    small = min(root);
+    big = max(root);
+
+    big->key = small->key;
+    deleteNode(root, small->key);
+
+
+
+
 }

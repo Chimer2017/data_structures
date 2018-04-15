@@ -110,8 +110,7 @@ vertex * Graph::findVertex(string city)
 
 void Graph::assignDistricts()
 {
-
-  int districtCount = 1;
+   int districtCount = 1;
   for (int z = 0; z < 10; z++)
   {
   if (vertices[z].districtID != -1)
@@ -163,10 +162,10 @@ void Graph::assignDistricts()
 	}
 
 	// print the path from 'src' to 'dst'
-	cout << endl << "Path: ";
+	//cout << endl << "Path: ";
 	for(int i = 0; i < path.size()-1; i++)
   {
-    cout << path[i]->name << "-->";
+   // cout << path[i]->name << "-->";
     path[i]->districtID = districtCount;
     for ( int x = 0; x < path[i]->adj.size(); x++)
     {
@@ -183,6 +182,8 @@ void Graph::assignDistricts()
 
   }
 }
+
+
 
 
 void Graph::shortestPath(string startC, string endC)
@@ -279,7 +280,8 @@ void Graph::shortestWeightedPath(string startC, string endC)
     cout << "No safe path between cities" << endl;
   else
   {
-    set<vertex*> Q;
+    std::vector<vertex*> v;
+    vertex * startV;
     for ( int i = 0; i < (int)vertices.size(); i++)
     {
         vertices[i].visited = false;
@@ -289,46 +291,77 @@ void Graph::shortestWeightedPath(string startC, string endC)
             startV = &vertices[i];
         }
         vertices[i].parent = NULL;
-        Q.insert(&vertices[i]);
 
 
     }
 
     startV->weightedDistance = 0;
-    vertex * u;
+    startV->visited = true;
+    v.push_back(startV);
+    vertex * n;
+    vertex * solvedV;
+    int dist;
+    vertex * parent;
 
-    while(!Q.empty())
+    while(tmpE->visited != true)
     {
-        if (Q.size() == 1)
+      int minDistance = INT_MAX;
+      solvedV = NULL;
+      for (int x = 0; x<v.size(); x++)
+      {
+        n = v[x];
+        for (int y = 0; y < n->adj.size(); y++)
         {
-          u = Q.begin().
-        }
-        else
-        {
-          int min = 1000;
-          for (int i = 0; i < Q.size() ; i++)
-          {
-            if (Q[i]->weightedDistance < min)
+            if (!n->adj[y].v->visited)
             {
-              u = Q[i];
+              dist = n->weightedDistance + n->adj[y].weight;
+              if (dist < minDistance)
+              {
+                solvedV = n->adj[y].v;
+                minDistance = dist;
+                parent = n;
+              }
+
             }
-          }
+
         }
-        Q.erase(u);
-        for ( int i = 0; i < u->adj.size(); i++)
-        {
-          u->adj[i].v->weightedDistance = u->weightedDistance;
-          int alt;
-          alt = u->weightedDistance + u->adj[i].weight;
-          if (alt < )
-        }
+      }
+      solvedV->weightedDistance = minDistance;
+      solvedV->parent = parent;
+      solvedV->visited = true;
+      v.push_back(solvedV);
+
+
+
+
+
     }
-  }
+    //cout << tmpE->weightedDistance << endl;
+    stack<vertex*> s;
+    // path will be the path taken from 'src' to 'dst'
+    vector<vertex*> path;
+    int disCount = tmpE->weightedDistance;
+    // make sure the vertices have 'visited' set to false
+    // push the starting node 'src'
+    s.push(tmpE);
+    vertex * tmp = tmpE->parent;
+    while(tmp != NULL)
+    {
+        s.push(tmp);
+        tmp = tmp->parent;
+    }
+    cout << disCount;
+    while( !s.empty())
+    {
+        cout << ", "<< s.top()->name;
+        s.pop();
+    }
+    cout << endl;
+      return;
 
 
 
-
-
+}
 }
 
 

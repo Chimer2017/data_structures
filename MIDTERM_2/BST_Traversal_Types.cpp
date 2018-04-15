@@ -43,4 +43,45 @@ void printPreorder(struct node* node)
 
      /* now recur on right subtree */
      printPreorder(node->right);
-}    
+}
+
+
+
+TreeNode * min(TreeNode *node)
+{
+  TreeNode *current;
+  current = node;
+
+  /* loop down to find the leftmost leaf */
+  while (current->leftChild != NULL)
+      current = current->leftChild;
+
+  return current;
+}
+
+TreeNode * max(TreeNode *node)
+{
+  TreeNode *current;
+  current = node;
+
+  /* loop down to find the leftmost leaf */
+  while (current->rightChild != NULL)
+      current = current->rightChild;
+
+  return current;
+}
+
+
+
+
+void replaceMaxWithMin(TreeNode *root)
+{
+    TreeNode *small, *big;
+    small = min(root);
+    big = max(root);
+
+    big->key = small->key;
+
+
+
+}
