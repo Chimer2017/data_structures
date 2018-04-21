@@ -5,7 +5,7 @@
 using namespace std;
 
 
-void readFileSLL(pqList * tmp, string filename)
+void readFileSLL(pqList * tmp, string filename, int r)
 {
   string line;
   string n,p,t;
@@ -13,7 +13,7 @@ void readFileSLL(pqList * tmp, string filename)
   ff.open(filename);
   getline(ff,line);
   int readCount = 0;
-  int rows = 200;
+  int rows = r;
   while (readCount < rows)
   {
     readCount++;
@@ -22,7 +22,9 @@ void readFileSLL(pqList * tmp, string filename)
     getline(ss,n,',');
     getline(ss,p,',');
     getline(ss,t,',');
+    cout <<readCount <<  ": about tp add\n";
     tmp->enqueue(n,stoi(p),stoi(t));
+    cout << n << " " << readCount << ": added\n";
   }
 }
 
@@ -30,12 +32,14 @@ void readFileSLL(pqList * tmp, string filename)
 int main() {
 
   string filename = "test.csv";
-  ////Linked List Object Init/////////
+  ////Linked List Object Init and Run/////////
   pqList qList;
   pqList * qListPtr;
   qListPtr = &qList;
-  readFileSLL(qListPtr,filename);
-  qList.printQueue();
+  int rows = 10;
+  readFileSLL(qListPtr,filename,rows);
+  //qList.printQueue();
+  qList.dequeue();
 
 
 

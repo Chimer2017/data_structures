@@ -35,21 +35,40 @@ void pqList::enqueue(string n, int p, int t )
 
         // Either at the ends of the list
         // or at required position
-        if ( start->treat == start->next->treat)
+        if ( temp->pri == start->next->pri)
         {
+
           while(start->next != NULL && start->next->treat < t)
           {
             start = start->next;
           }
         }
+        if (start->next == NULL)
+        {
+          start->next = temp;
+          temp->next = NULL;
+        }
+        else
+        {
+          temp->next = start->next;
+          start->next = temp;
+        }
 
-        temp->next = start->next;
-        start->next = temp;
+
     }
 }
 
 void pqList::dequeue()
 {
+  while (head != NULL)
+  {
+    listNode * temp = head;
+    cout << temp->name << " dequeued\n";
+    head = head->next;
+    delete temp;
+  }
+
+
 
 }
 
@@ -60,20 +79,11 @@ void pqList::printQueue()
   int count = 1;
   while (current!= NULL)
   {
+    cout << "test" << endl;
     cout <<count << ": " << current->name << " " << current->pri << " " << current->treat << endl;
     count++;
     current = current->next;
   }
 
-
-}
-
-bool pqList::queueIsFull()
-{
-
-}
-
-bool pqList::queueIsEmpty()
-{
 
 }
