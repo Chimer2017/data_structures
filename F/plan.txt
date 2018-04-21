@@ -1,0 +1,21 @@
+We are going to build 3 versions of a priority queue
+
+1. Heap
+2. SLL
+3. STl
+
+Each needs to have:
+  Enqueue Function
+  Dequeue Function
+
+
+Files Necessary:
+
+For Heap:
+  .hpp
+  .cpp
+For SLL
+  .hpp
+  .cpp
+For STl
+  .main.cpp
