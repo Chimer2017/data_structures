@@ -12,7 +12,7 @@ struct node {
   int pri;
   int treat;
   node(){};
-  node(n,p,t)
+  node(string n, int p,int t)
   {
     name = n;
     pri = p;
@@ -33,6 +33,6 @@ public:
   int right(int i) {return (2*i + 2);}
   int parent(int i) {return ((i-1)/2);}
   node dequeueH();
-  void enqueueH();
+  void enqueueH(node);
 };
 #endif
