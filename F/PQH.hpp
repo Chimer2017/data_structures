@@ -33,6 +33,6 @@ public:
   int right(int i) {return (2*i + 2);}
   int parent(int i) {return ((i-1)/2);}
   node dequeueH();
-  void enqueueH(node);
+  void enqueueH(node[]);
 };
 #endif

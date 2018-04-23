@@ -16,6 +16,21 @@ void mh::minHeapify(node*)
 
 node mh::dequeueH()
 {
+    if (heapSize <= 0)
+        return INT_MAX;
+    if (heapSize == 1)
+    {
+        heapSize--;
+        return harr[0];
+    }
+
+    // Store the minimum value, and remove it from heap
+    node root = harr[0];
+    harr[0] = harr[heapSize-1];
+    heapSize--;
+    MinHeapify(0);
+
+    return root;
 
 }
 
@@ -26,8 +41,11 @@ void swap(node *x, node *y)
     *y = temp;
 }
 
-void mh::enqueueH(node tmp)
+void mh::enqueueH(node arr[])
 {
+  int index = 0;
+  while(index < arraySize)
+  {
     if (heapSize == arraySize)
     {
         cout << "\nOverflow: Could not insertKey\n";
@@ -35,9 +53,10 @@ void mh::enqueueH(node tmp)
     }
 
     // First insert the new key at the end
+    node temp = node(arr[index].name,arr[index].pri,arr[index].treat);
     heapSize++;
     int i = heapSize - 1;
-    harr[i] = tmp;
+    harr[i] = temp;
 
     // Fix the min heap property if it is violated
     while (i != 0 && harr[parent(i)].pri >= harr[i].pri)
@@ -46,6 +65,9 @@ void mh::enqueueH(node tmp)
        swap(&harr[i], &harr[parent(i)]);
        i = parent(i);
     }
+    cout <<index << ": Added " << harr[i].name << endl;
+    index++;
+  }
 
 
 }

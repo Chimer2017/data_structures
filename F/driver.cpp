@@ -78,15 +78,15 @@ node * readFileHeap(string filename,int r)
 int main() {
 
   string filename = "test.csv";
-  int rows = 10;
+  int rows = 880;
   ////Linked List Object Init and Run/////////**************************
   pqList qList;
   pqList * qListPtr;
   qListPtr = &qList;
 
-  readFileSLL(qListPtr,filename,rows);
-  qList.printQueue();
-  qList.dequeue();
+  // readFileSLL(qListPtr,filename,rows);
+  // qList.printQueue();
+  // qList.dequeue();
 
 
 
@@ -96,6 +96,11 @@ int main() {
 
   mh qHeap = mh(880);
   node *arrPtr = readFileHeap(filename,rows);
+  // for (int i = 0; i < rows;i++)
+  // {
+  //   cout << arrPtr[i].name << " " << arrPtr[i].pri << " " << arrPtr[i].treat << endl;
+  // }
+  qHeap.enqueueH(arrPtr);
 
 
 
