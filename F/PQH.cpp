@@ -64,23 +64,25 @@ void mh::enqueueH(node arr[])
     {
       if (harr[parent(i)].pri == harr[i].pri)
       {
-        while (i != 0 && harr[parent(i)].treat >= harr[i].treat)
+        while (i != 0 && harr[parent(i)].treat > harr[i].treat)
         {
-          cout << "hello" << endl;
-          cout << "treat: " << harr[parent(i)].treat << " " << harr[i].treat << endl;
+          // cout << "hello" << endl;
+          // cout << "treat: " << harr[parent(i)].treat << " " << harr[i].treat << endl;
 
           swap(&harr[i], &harr[parent(i)]);
           i = parent(i);
         }
-        break;
+
       }
-        cout << harr[parent(i)].pri << " " << harr[i].pri << endl;
+
+        //cout << harr[parent(i)].pri << " " << harr[i].pri << endl;
         swap(&harr[i], &harr[parent(i)]);
         i = parent(i);
 
 
+
     }
-    cout <<index << ": Added " << harr[i].name << endl;
+    //cout <<index << ": Added " << harr[i].name << endl;
     index++;
   }
 
