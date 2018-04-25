@@ -101,6 +101,7 @@ int main() {
   //   cout << arrPtr[i].name << " " << arrPtr[i].pri << " " << arrPtr[i].treat << endl;
   // }
   qHeap.enqueueH(arrPtr);
+  qHeap.dequeueH();
 
 
 
