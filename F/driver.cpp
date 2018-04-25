@@ -1,10 +1,22 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <queue>
 #include "PQSLL.cpp"
 #include "PQH.cpp"
 using namespace std;
-
+struct stdNode {
+  string name;
+  int pri;
+  int treat;
+  stdNode(){};
+  stdNode(string n, int p, int t)
+  {
+    name = n;
+    pri = p;
+    treat = t;
+  }
+};
 
 void readFileSLL(pqList * tmp, string filename, int r)
 {
@@ -51,6 +63,36 @@ node * readFileHeap(string filename,int r)
     index++;
   }
 
+
+
+  return arr;
+
+
+}
+
+
+stdNode * readFileSTL(string filename,int r)
+{
+  stdNode * arr = new stdNode[r];
+  ifstream ff;
+  string line,n,p,t;
+  ff.open(filename);
+  getline(ff,line);
+  int readCount = 0;
+  int index = 0;
+  while(readCount < r)
+  {
+    readCount++;
+    getline(ff,line);
+    stringstream ss(line);
+    getline(ss,n,',');
+    getline(ss,p,',');
+    getline(ss,t);
+    stdNode temp = stdNode(n,stoi(p),stoi(t));
+    arr[index] = temp;
+    index++;
+  }
+
   return arr;
 
 
@@ -58,18 +100,19 @@ node * readFileHeap(string filename,int r)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+struct order {
+  bool operator() (stdNode const &a, stdNode const &b)
+  {
+    if (a.pri != b.pri)
+    {
+      return a.pri > b.pri;
+    }
+    else if (a.pri == b.pri)
+    {
+      return a.treat > b.treat;
+    }
+  }
+};
 
 
 
@@ -102,6 +145,24 @@ int main() {
   // }
   qHeap.enqueueH(arrPtr);
   qHeap.dequeueH();
+
+
+//////STL Heap Object Init and Run *************************************
+priority_queue <stdNode, vector<stdNode>, order > pq;
+stdNode *stdArrPtr = readFileSTL(filename, rows);
+int index = 0;
+while (index < rows)
+{
+  pq.push(stdArrPtr[index]);
+  index++;
+}
+
+
+while (pq.empty() == false)
+    {
+        cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
+        pq.pop();
+    }
 
 
 
