@@ -27,6 +27,6 @@ public:
     void printQueue();
 protected:
 private:
-    listNode * head;
+    listNode * head=NULL;
 };
 #endif

@@ -39,7 +39,7 @@ void readFileSLL(pqList * tmp, string filename, int r)
     tmp->enqueue(n,stoi(p),stoi(t));
     cout << n << " " << readCount << ": added\n";
   }
-  delete tmp;
+
 }
 node * readFileHeap(string filename,int r)
 {
@@ -114,17 +114,17 @@ int main() {
   string filename = "test.csv";
   int rows = 880;
   ////Linked List Object Init and Run/////////**************************
-  // pqList qList;
-  // pqList * qListPtr;
-  // qListPtr = &qList;
-  // double tstart = clock();
-  // readFileSLL(qListPtr,filename,rows);
-  // //qList.printQueue();
-  // qList.dequeue();
-  // double tend = clock();
-  //
-  // cout << tstart - tend << endl;
-  //
+  pqList qList;
+  pqList * qListPtr;
+  qListPtr = &qList;
+  double tstart = clock();
+  readFileSLL(qListPtr,filename,rows);
+  //qList.printQueue();
+  qList.dequeue();
+  double tend = clock();
+
+  cout << (tend - tstart) / CLOCKS_PER_SEC << endl;
+
 
 
 
@@ -137,11 +137,11 @@ int main() {
   // {
   //   cout << arrPtr[i].name << " " << arrPtr[i].pri << " " << arrPtr[i].treat << endl;
   // }
-  double tstart = clock();
-  qHeap.enqueueH(arrPtr);
-  qHeap.dequeueH();
-  double tend = clock();
-  cout << (tend-tstart)/CLOCKS_PER_SEC << endl;
+  // double tstart = clock();
+  // qHeap.enqueueH(arrPtr);
+  // qHeap.dequeueH();
+  // double tend = clock();
+  // cout << (tend-tstart)/CLOCKS_PER_SEC << endl;
 
 
 // //////STL Heap Object Init and Run *************************************
