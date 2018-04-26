@@ -23,25 +23,9 @@ void mh::minHeapify(int i)
 
       if (l < heapSize && harr[l].pri < harr[i].pri)
           smallest = l;
-      else if (l < heapSize && harr[l].pri == harr[i].pri)
-      {
-        cout << "L: equal" << endl;
-        if (harr[l].treat < harr[i].treat)
-          smallest = l;
-      }
-
-
       if (r < heapSize && harr[r].pri < harr[smallest].pri)
           smallest = r;
-      else if (r < heapSize && harr[r].pri == harr[i].pri)
-      {
-          cout << "R: equal" << endl;
-          if (harr[r].treat < harr[i].treat)
-            smallest = r;
-      }
-
-
-
+ 
       if (smallest != i)
       {
           swap(&harr[i], &harr[smallest]);
