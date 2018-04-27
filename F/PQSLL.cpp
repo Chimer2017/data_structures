@@ -13,14 +13,14 @@ void pqList::enqueue(string n, int p, int t )
    listNode *temp = new listNode(n,p,t);
    if (head == NULL)
    {
-     cout << "create head" << endl;
+    // cout << "create head" << endl;
      head = temp;
      return;
    }
 
     if (head->pri > p)
     {
-      cout << "new head" << endl;
+      //cout << "new head" << endl;
 
         // Insert New Node before head
         temp->next = head;
@@ -30,7 +30,6 @@ void pqList::enqueue(string n, int p, int t )
     {
 
           listNode *start = head;
-          cout << "shit" << endl;
           while (start->next != NULL && *(start->next) < *temp)
             start = start->next;
 
@@ -50,7 +49,7 @@ void pqList::dequeue()
   while (head != NULL)
   {
     listNode * temp = head;
-    cout << temp->name << " dequeued\n";
+    //cout << temp->name << " dequeued\n";
     head = head->next;
     delete temp;
   }

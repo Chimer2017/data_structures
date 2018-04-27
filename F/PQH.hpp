@@ -18,6 +18,18 @@ struct node {
     pri = p;
     treat = t;
   }
+  bool operator<(const node & p)const{
+		if( this->pri < p.pri ) return true;
+		else if( this->pri > p.pri ) return false;
+		else if( this->treat < p.treat ) return true;
+		return false;
+	}
+	bool operator>(const node & p)const{
+		if( this->pri > p.pri ) return true;
+		else if( this->pri < p.pri ) return false;
+		else if( this->treat > p.treat ) return true;
+		return false;
+	}
 };
 
 
@@ -27,6 +39,7 @@ class mh {
   int heapSize;
 public:
   mh(){};
+  ~mh();
   mh(int);
   void minHeapify(int);
   int left(int i) {return (2*i + 1);}

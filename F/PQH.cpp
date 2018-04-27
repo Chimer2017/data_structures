@@ -8,6 +8,10 @@ mh::mh(int cap)
     arraySize = cap;
     harr = new node[cap];
 }
+mh::~mh()
+{
+  delete harr;
+}
 void swap(node *x, node *y)
 {
     node temp = *x;
@@ -21,11 +25,11 @@ void mh::minHeapify(int i)
     int r = right(i);
     int smallest = i;
 
-      if (l < heapSize && harr[l].pri < harr[i].pri)
+      if (l < heapSize && harr[l] < harr[i])
           smallest = l;
-      if (r < heapSize && harr[r].pri < harr[smallest].pri)
+      if (r < heapSize && harr[r] < harr[smallest])
           smallest = r;
- 
+
       if (smallest != i)
       {
           swap(&harr[i], &harr[smallest]);
@@ -42,6 +46,7 @@ void mh::minHeapify(int i)
 
 void mh::dequeueH()
 {
+  node root;
   int index = 0;
   while(index < arraySize)
   {
@@ -53,7 +58,7 @@ void mh::dequeueH()
     }
 
     // Store the minimum value, and remove it from heap
-    node root = harr[0];
+    root = harr[0];
     cout << root.name << " " << root.pri << " " << root.treat << endl;
     harr[0] = harr[heapSize-1];
     heapSize--;
@@ -85,27 +90,10 @@ void mh::enqueueH(node arr[])
     harr[i] = temp;
 
     // Fix the min heap property if it is violated
-    while (i != 0 && harr[parent(i)].pri >= harr[i].pri)
+    while (i != 0 && harr[parent(i)] > harr[i])
     {
-      if (harr[parent(i)].pri == harr[i].pri)
-      {
-        while (i != 0 && harr[parent(i)].treat > harr[i].treat)
-        {
-          // cout << "hello" << endl;
-          // cout << "treat: " << harr[parent(i)].treat << " " << harr[i].treat << endl;
-
-          swap(&harr[i], &harr[parent(i)]);
-          i = parent(i);
-        }
-
-      }
-
-        //cout << harr[parent(i)].pri << " " << harr[i].pri << endl;
         swap(&harr[i], &harr[parent(i)]);
         i = parent(i);
-
-
-
     }
     //cout <<index << ": Added " << harr[i].name << endl;
     index++;
