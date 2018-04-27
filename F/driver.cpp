@@ -119,8 +119,8 @@ int main() {
   qListPtr = &qList;
   double tstart = clock();
   readFileSLL(qListPtr,filename,rows);
-  //qList.printQueue();
-  qList.dequeue();
+  qList.printQueue();
+  //qList.dequeue();
   double tend = clock();
 
   cout << (tend - tstart) / CLOCKS_PER_SEC << endl;

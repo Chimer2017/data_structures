@@ -15,6 +15,19 @@ struct listNode {
     treat = t;
     next = NULL;
   }
+
+  bool operator<(const listNode & p)const{
+		if( this->pri < p.pri ) return true;
+		else if( this->pri > p.pri ) return false;
+		else if( this->treat < p.treat ) return true;
+		return false;
+	}
+	bool operator>(const listNode & p)const{
+		if( this->pri > p.pri ) return true;
+		else if( this->pri < p.pri ) return false;
+		else if( this->treat > p.treat ) return true;
+		return false;
+	}
 };
 class pqList
 {

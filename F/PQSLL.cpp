@@ -7,15 +7,20 @@ using namespace std;
 void pqList::enqueue(string n, int p, int t )
 {
 
-   listNode *start = head;
+
 
     // Create new Node
    listNode *temp = new listNode(n,p,t);
    if (head == NULL)
-      head = temp;
-      return;
+   {
+     cout << "create head" << endl;
+     head = temp;
+     return;
+   }
+
     if (head->pri > p)
     {
+      cout << "new head" << endl;
 
         // Insert New Node before head
         temp->next = head;
@@ -24,19 +29,10 @@ void pqList::enqueue(string n, int p, int t )
     else
     {
 
-        while (start->next != NULL && start->next->pri < p)
-        {
+          listNode *start = head;
+          cout << "shit" << endl;
+          while (start->next != NULL && *(start->next) < *temp)
             start = start->next;
-        }
-
-        if ( temp->pri == start->next->pri)
-        {
-
-          while(start->pri == temp->pri && start->next->treat < t)
-          {
-            start = start->next;
-          }
-        }
 
 
           temp->next = start->next;
