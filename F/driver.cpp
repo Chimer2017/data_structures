@@ -109,40 +109,46 @@ struct order
   }
 };
 int main() {
-  int rows;
-  string filename = "test.csv";
-  cout << "Rows: ";
-  cin >> rows;
-
-  ////Linked List Object Init and Run/////////**************************
-  pqList qList;
-  pqList * qListPtr;
-  qListPtr = &qList;
-  double tstart = clock();
-  readFileSLL(qListPtr,filename,rows);
-  //qList.printQueue();
-  qList.dequeue();
-  double tend = clock();
-
-  cout << "SLL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
-
-  // //////STL Heap Object Init and Run *************************************
-  priority_queue <stdNode, vector<stdNode>, order > pq;
-  stdNode *stdArrPtr = readFileSTL(filename, rows);
-  int index = 0;
-  tstart = clock();
-  while (index < rows)
+  int status =0;
+  while(status == 0)
   {
-    pq.push(stdArrPtr[index]);
-    index++;
-  }
-  while (pq.empty() == false)
-  {
-    //cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
-    pq.pop();
-  }
-  tend = clock();
-  cout << "STL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+    int rows;
+    string filename = "test.csv";
+    cout << "Rows: ";
+    cin >> rows;
+    if ( rows == 000)
+      return 0;
+
+
+    ////Linked List Object Init and Run/////////**************************
+    pqList qList;
+    pqList * qListPtr;
+    qListPtr = &qList;
+    double tstart = clock();
+    readFileSLL(qListPtr,filename,rows);
+    //qList.printQueue();
+    qList.dequeue();
+    double tend = clock();
+
+    cout << "SLL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+
+    // //////STL Heap Object Init and Run *************************************
+    priority_queue <stdNode, vector<stdNode>, order > pq;
+    stdNode *stdArrPtr = readFileSTL(filename, rows);
+    int index = 0;
+    tstart = clock();
+    while (index < rows)
+    {
+      pq.push(stdArrPtr[index]);
+      index++;
+    }
+    while (pq.empty() == false)
+    {
+      //cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
+      pq.pop();
+    }
+    tend = clock();
+    cout << "STL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
 
 
 
@@ -150,22 +156,19 @@ int main() {
 
 
 
-  /////////Min Heap Object Init and Run////////////////////////////*******
+    /////////Min Heap Object Init and Run////////////////////////////*******
 
-  mh qHeap = mh(rows);
-  node *arrPtr = readFileHeap(filename,rows);
-  for (int i = 0; i < rows;i++)
-  {
-    cout << arrPtr[i].name << " " << arrPtr[i].pri << " " << arrPtr[i].treat << endl;
-  }
-  tstart = clock();
-  qHeap.enqueueH(arrPtr);
-  qHeap.dequeueH();
-  tend = clock();
-  cout << "Heap Implementation: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
-  // delete [] arrPtr;
-  // qHeap.~mh();
-
+    mh qHeap = mh(rows);
+    node *arrPtr = readFileHeap(filename,rows);
+    tstart = clock();
+    qHeap.enqueueH(arrPtr);
+    //tstart = clock();
+    qHeap.dequeueH();
+    tend = clock();
+    cout << "Heap Implementation: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
+    // delete [] arrPtr;
+    // qHeap.~mh();
+}
 
 
 
