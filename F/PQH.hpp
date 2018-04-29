@@ -39,7 +39,7 @@ class mh {
   int heapSize;
 public:
   mh(){};
-  ~mh();
+  ~mh(){};
   mh(int);
   void minHeapify(int);
   int left(int i) {return (2*i + 1);}

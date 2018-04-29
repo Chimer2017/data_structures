@@ -62,7 +62,7 @@ node * readFileHeap(string filename,int r)
     arr[index] = temp;
     index++;
   }
-  
+
   return arr;
 
 
@@ -105,6 +105,7 @@ struct order
     {
       return a.treat > b.treat;
     }
+    return false;
   }
 };
 int main() {
@@ -125,6 +126,26 @@ int main() {
 
   cout << "SLL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
 
+  // //////STL Heap Object Init and Run *************************************
+  priority_queue <stdNode, vector<stdNode>, order > pq;
+  stdNode *stdArrPtr = readFileSTL(filename, rows);
+  int index = 0;
+  tstart = clock();
+  while (index < rows)
+  {
+    pq.push(stdArrPtr[index]);
+    index++;
+  }
+  while (pq.empty() == false)
+  {
+    //cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
+    pq.pop();
+  }
+  tend = clock();
+  cout << "STL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+
+
+
 
 
 
@@ -133,36 +154,19 @@ int main() {
 
   mh qHeap = mh(rows);
   node *arrPtr = readFileHeap(filename,rows);
-  // for (int i = 0; i < rows;i++)
-  // {
-  //   cout << arrPtr[i].name << " " << arrPtr[i].pri << " " << arrPtr[i].treat << endl;
-  // }
-  // tstart = clock();
-  // qHeap.enqueueH(arrPtr);
-  // qHeap.dequeueH();
-  // tend = clock();
-  // cout << "Heap Implementation: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
+  for (int i = 0; i < rows;i++)
+  {
+    cout << arrPtr[i].name << " " << arrPtr[i].pri << " " << arrPtr[i].treat << endl;
+  }
+  tstart = clock();
+  qHeap.enqueueH(arrPtr);
+  qHeap.dequeueH();
+  tend = clock();
+  cout << "Heap Implementation: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
   // delete [] arrPtr;
   // qHeap.~mh();
 
-// //////STL Heap Object Init and Run *************************************
-// priority_queue <stdNode, vector<stdNode>, order > pq;
-// stdNode *stdArrPtr = readFileSTL(filename, rows);
-// int index = 0;
-// while (index < rows)
-// {
-//   pq.push(stdArrPtr[index]);
-//   index++;
-// }
-//
-//
-// while (pq.empty() == false)
-// {
-//   cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
-//   pq.pop();
-// }
-//
-//
+
 
 
 

@@ -8,10 +8,6 @@ mh::mh(int cap)
     arraySize = cap;
     harr = new node[cap];
 }
-mh::~mh()
-{
-  delete harr;
-}
 void swap(node *x, node *y)
 {
     node temp = *x;
@@ -55,11 +51,13 @@ void mh::dequeueH()
     if (heapSize == 1)
     {
         heapSize--;
+        //cout << index+1 <<":    " << harr[0].name << ",  " << harr[0].pri << ",  " << harr[0].treat << endl;
+        return;
     }
 
     // Store the minimum value, and remove it from heap
     root = harr[0];
-    cout << root.name << " " << root.pri << " " << root.treat << endl;
+    //cout << index+1 <<":    " << root.name << ",  " << root.pri << ",  " << root.treat << endl;
     harr[0] = harr[heapSize-1];
     heapSize--;
     minHeapify(0);
