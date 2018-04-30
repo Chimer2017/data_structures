@@ -5,6 +5,8 @@
 #include <time.h>
 #include "PQSLL.cpp"
 #include "PQH.cpp"
+#include <math.h>
+
 using namespace std;
 struct stdNode {
   string name;
@@ -108,6 +110,29 @@ struct order
     return false;
   }
 };
+
+int variance(double a[], int n)
+{
+    // Compute mean (average of elements)
+    double sum = 0;
+    for (int i=0; i<n; i++)
+        sum += a[i];
+    double mean = (double)sum/(double)n;
+
+    // Compute sum squared differences with
+    // mean.
+    double sqDiff = 0;
+    for (int i=0; i<n; i++)
+        sqDiff += (a[i] - mean)*(a[i] - mean);
+    return sqDiff/n;
+}
+
+double standardDeviation(double arr[], int n)
+{
+      return sqrt(variance(arr, n));
+}
+
+
 int main() {
   int status =0;
   while(status == 0)
@@ -118,39 +143,93 @@ int main() {
     cin >> rows;
     if ( rows == 000)
       return 0;
+    double tstart;
+    double tend;
+    double arraySLLEnqueue[500];
+    double arraySLLDequeue[500];
+
+    for (int i = 0; i < 500; i++)
+    {
+      pqList qList;
+      pqList * qListPtr;
+      qListPtr = &qList;
+      tstart = clock();
+      readFileSLL(qListPtr,filename,rows);
+      tend = clock();
+      //cout << "SLL Implementation Enqueue: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+      arraySLLEnqueue[i] = ((double)tend - (double)tstart) / CLOCKS_PER_SEC;
+      //qList.printQueue();
+      tstart = clock();
+      qList.dequeue();
+      tend = clock();
+      arraySLLDequeue[i] = (tend - tstart) / CLOCKS_PER_SEC;
+      //cout << "SLL Implementation Dequeue: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+    }
+    double sumE = 0;
+    double sumD = 0;
+    for (int i=0; i<500; i++)
+    {
+      sumE += arraySLLEnqueue[i];
+      sumD += arraySLLDequeue[i];
+    }
+    //cout << sumD <<" " << sumE << endl;
+    double meanE = (double)sumE/(double)500;
+    double meanD = (double)sumD/(double)500;
+    double stdSLLEnqueue = standardDeviation(arraySLLEnqueue,500);
+    double stdSLLDequeue = standardDeviation(arraySLLDequeue,500);
+
+    cout << "SLL Enqueue Mean: " << meanE << " Standard Deviation: " << stdSLLEnqueue << endl;
+    cout << "SLL Dequeue Mean: " << meanD << " Standard Deviation: " << stdSLLDequeue << endl;
+
 
 
     ////Linked List Object Init and Run/////////**************************
-    pqList qList;
-    pqList * qListPtr;
-    qListPtr = &qList;
-    double tstart = clock();
-    readFileSLL(qListPtr,filename,rows);
-    //qList.printQueue();
-    qList.dequeue();
-    double tend = clock();
 
-    cout << "SLL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
 
     // //////STL Heap Object Init and Run *************************************
     priority_queue <stdNode, vector<stdNode>, order > pq;
     stdNode *stdArrPtr = readFileSTL(filename, rows);
-    int index = 0;
-    tstart = clock();
-    while (index < rows)
-    {
-      pq.push(stdArrPtr[index]);
-      index++;
-    }
-    while (pq.empty() == false)
-    {
-      //cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
-      pq.pop();
-    }
-    tend = clock();
-    cout << "STL Implementation: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
 
+    double arraySTLEnqueue[500];
+    double arraySTLDequeue[500];
 
+    for (int i = 0; i < 500; i++)
+    {
+      int index = 0;
+      tstart = clock();
+      while (index < rows)
+      {
+        pq.push(stdArrPtr[index]);
+        index++;
+      }
+      tend = clock();
+      arraySTLEnqueue[i] = (tend - tstart) / CLOCKS_PER_SEC;
+      //cout << "STL Implementation Enqueue: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+      tstart = clock();
+      while (pq.empty() == false)
+      {
+        //cout << pq.top().name << " " << pq.top().pri << " " << pq.top().treat << endl;
+        pq.pop();
+      }
+      tend = clock();
+      arraySTLDequeue[i] = (tend - tstart) / CLOCKS_PER_SEC;
+    }
+    //cout << "STL Implementation Dequeue: " << (tend - tstart) / CLOCKS_PER_SEC << endl;
+    sumE = 0;
+    sumD = 0;
+    for (int i=0; i<500; i++)
+    {
+      sumE += arraySTLEnqueue[i];
+      sumD += arraySTLDequeue[i];
+    }
+    //cout << sumD <<" " << sumE << endl;
+    meanE = (double)sumE/(double)500;
+    meanD = (double)sumD/(double)500;
+    double stdSTLEnqueue = standardDeviation(arraySTLEnqueue,500);
+    double stdSTLDequeue = standardDeviation(arraySTLDequeue,500);
+
+    cout << "STL Enqueue Mean: " << meanE << " Standard Deviation: " << stdSTLEnqueue << endl;
+    cout << "STL Dequeue Mean: " << meanD << " Standard Deviation: " << stdSTLDequeue << endl;
 
 
 
@@ -160,14 +239,42 @@ int main() {
 
     mh qHeap = mh(rows);
     node *arrPtr = readFileHeap(filename,rows);
-    tstart = clock();
-    qHeap.enqueueH(arrPtr);
-    //tstart = clock();
-    qHeap.dequeueH();
-    tend = clock();
-    cout << "Heap Implementation: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
-    // delete [] arrPtr;
-    // qHeap.~mh();
+
+    double arrayHEnqueue[500];
+    double arrayHDequeue[500];
+
+    for (int i = 0; i < 500; i++)
+    {
+      tstart = clock();
+      qHeap.enqueueH(arrPtr);
+      tend = clock();
+      arrayHEnqueue[i] = (tend - tstart) / CLOCKS_PER_SEC;
+      //cout << "Heap Implementation Enqueue: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
+
+      //tstart = clock();
+      tstart = clock();
+      qHeap.dequeueH();
+      tend = clock();
+      arrayHDequeue[i] = (tend - tstart) / CLOCKS_PER_SEC;
+      //cout << "Heap Implementation Dequeue: " << (tend-tstart)/CLOCKS_PER_SEC << endl;
+      // delete [] arrPtr;
+      // qHeap.~mh();
+    }
+    sumE = 0;
+    sumD = 0;
+    for (int i=0; i<500; i++)
+    {
+      sumE += arrayHEnqueue[i];
+      sumD += arrayHDequeue[i];
+    }
+    //cout << sumD <<" " << sumE << endl;
+    meanE = (double)sumE/(double)500;
+    meanD = (double)sumD/(double)500;
+    double stdHEnqueue = standardDeviation(arrayHEnqueue,500);
+    double stdHDequeue = standardDeviation(arrayHDequeue,500);
+
+    cout << "Heap Enqueue Mean: " << meanE << " Standard Deviation: " << stdHEnqueue << endl;
+    cout << "Heap Dequeue Mean: " << meanD << " Standard Deviation: " << stdHDequeue << endl;
 }
 
 
