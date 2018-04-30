@@ -111,12 +111,17 @@ struct order
   }
 };
 
-int variance(double a[], int n)
+double variance(double a[], double n)
 {
     // Compute mean (average of elements)
     double sum = 0;
     for (int i=0; i<n; i++)
-        sum += a[i];
+    {
+      //cout << a[i] << endl;
+      sum += a[i];
+    }
+
+
     double mean = (double)sum/(double)n;
 
     // Compute sum squared differences with
@@ -124,7 +129,9 @@ int variance(double a[], int n)
     double sqDiff = 0;
     for (int i=0; i<n; i++)
         sqDiff += (a[i] - mean)*(a[i] - mean);
-    return sqDiff/n;
+
+    //cout << sqDiff/n << endl;
+    return sqDiff/(double)n;
 }
 
 double standardDeviation(double arr[], int n)
