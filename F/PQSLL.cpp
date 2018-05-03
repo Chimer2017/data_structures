@@ -9,7 +9,6 @@ void pqList::enqueue(string n, int p, int t )
 
 
 
-    // Create new Node
    listNode *temp = new listNode(n,p,t);
    if (head == NULL)
    {
@@ -22,7 +21,7 @@ void pqList::enqueue(string n, int p, int t )
     {
       //cout << "new head" << endl;
 
-        // Insert New Node before head
+
         temp->next = head;
         head = temp;
     }

@@ -55,7 +55,6 @@ void mh::dequeueH()
         return;
     }
 
-    // Store the minimum value, and remove it from heap
     root = harr[0];
     //cout << index+1 <<":    " << root.name << ",  " << root.pri << ",  " << root.treat << endl;
     harr[0] = harr[heapSize-1];
@@ -87,7 +86,6 @@ void mh::enqueueH(node arr[])
     int i = heapSize - 1;
     harr[i] = temp;
 
-    // Fix the min heap property if it is violated
     while (i != 0 && harr[parent(i)] > harr[i])
     {
         swap(&harr[i], &harr[parent(i)]);
